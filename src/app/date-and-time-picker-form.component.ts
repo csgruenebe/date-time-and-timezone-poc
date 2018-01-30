@@ -10,7 +10,7 @@ import { isString } from 'util';
   selector: 'app-date-and-time-picker-form',
   template: `
     <app-mac type="de">
-      <div *ngIf="!utcInputInvalid">
+      <div *ngIf="!errors.utcInputInvalid">
         <div
           *ngIf="datePicker?.formGroup"
           [formGroup]="datePicker.formGroup"
