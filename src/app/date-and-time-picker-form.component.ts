@@ -11,7 +11,7 @@ import { sharedStyles } from './app.styles';
   selector: 'app-date-and-time-picker-form',
   encapsulation: ViewEncapsulation.None,
   template: `
-    <app-mac [type]="timezone">
+    <app-mac [type]="timezone" *ngIf="validTimezoneAwareMoment">
       <div *ngIf="!errors.utcInputInvalid">
         <div
           *ngIf="datePicker?.formGroup"
@@ -97,7 +97,7 @@ export class DateAndTimePickerFormComponent implements OnInit, OnChanges {
 
 
   //
-  // IMPUTS AND OUTPUTS
+  // INPUTS AND OUTPUTS
   //
   @Input()
   utcDate: string; // e.g. '2018-08-20T12:00:00.000+0000'
@@ -121,10 +121,14 @@ export class DateAndTimePickerFormComponent implements OnInit, OnChanges {
   }
 
   initDateAndTimePicker() {
+    const self = this;
     if (UtcHelper.isValidJavaUTCDate(this.utcDate)) {
+      this.validTimezoneAwareMoment = null;
       this.validTimezoneAwareMoment = moment(this.utcDate).tz(this.timezone);
-      this.initDatePicker();
-      this.initTimePicker();
+      self.initDatePicker();
+      self.initTimePicker(this.validTimezoneAwareMoment.hour(),
+        this.validTimezoneAwareMoment.minute(),
+        this.validTimezoneAwareMoment.second());
       this.errors.utcInputInvalid = false;
     } else {
       this.errors.utcInputInvalid = true;
@@ -134,28 +138,27 @@ export class DateAndTimePickerFormComponent implements OnInit, OnChanges {
   initDatePicker() {
     const datePickerModel = {
       date: {
-        year: parseInt(this.validTimezoneAwareMoment.format('YYYY'), 10),
-        month: parseInt(this.validTimezoneAwareMoment.format('M'), 10),
-        day: parseInt(this.validTimezoneAwareMoment.format('D'), 10),
+        year: this.validTimezoneAwareMoment.year(),
+        month: this.validTimezoneAwareMoment.format('M'),
+        day: this.validTimezoneAwareMoment.format('D'),
       }
     };
     this.datePicker.formGroup.get('date').setValue(datePickerModel);
   }
 
-  initTimePicker() {
-    this.timePicker.formGroup.get('hour').setValue(this.validTimezoneAwareMoment.format('HH'));
-    this.timePicker.formGroup.get('minute').setValue(this.validTimezoneAwareMoment.format('mm'));
-    this.timePicker.formGroup.get('second').setValue(this.validTimezoneAwareMoment.format('ss'));
+  initTimePicker(hour: number, minute: number, second: number) {
+    this.timePicker.formGroup.get('hour').setValue(this.prefixWithZero(hour));
+    this.timePicker.formGroup.get('minute').setValue(this.prefixWithZero(minute));
+    this.timePicker.formGroup.get('second').setValue(this.prefixWithZero(second));
   }
 
   initChangeListener() {
-    console.log('initChangeListener');
     this.datePicker.formGroup.get('date').valueChanges.subscribe((changes: FormDate) => {
-      this.utcResult = this.buildJavaUtcResultDate(this.timePicker.formGroup.value, changes);
+      this.utcResult = this.updateInternalMomentAndReturnUtcDate(this.timePicker.formGroup.value, changes, true);
       this.emitChange();
     });
     this.timePicker.formGroup.valueChanges.subscribe((changes: FormTime) => {
-      this.utcResult = this.buildJavaUtcResultDate(changes, this.datePicker.formGroup.value.date);
+      this.utcResult = this.updateInternalMomentAndReturnUtcDate(changes, this.datePicker.formGroup.value.date, false);
       this.emitChange();
     });
   }
@@ -170,7 +173,26 @@ export class DateAndTimePickerFormComponent implements OnInit, OnChanges {
     return temp < 10 ? `0${temp}` : `${temp}`;
   }
 
-  buildJavaUtcResultDate(time: FormTime, date: FormDate) {
+  updateInternalMomentAndReturnUtcDate(time: FormTime, date: FormDate, updateDate) {
+    //
+    // UPDATE DATE (XOR UPDATE EITHER DATE OR TIME TO AVOID LOOPS)
+    //
+    if (updateDate === true) {
+      this.validTimezoneAwareMoment.year(parseInt(date.date.year, 10));
+      this.validTimezoneAwareMoment.month(parseInt(date.date.month, 10));
+      this.validTimezoneAwareMoment.day(parseInt(date.date.day, 10));
+    }
+    //
+    // UPDATE TIME (XOR UPDATE EITHER DATE OR TIME TO AVOID LOOPS)
+    //
+    if (updateDate === false) {
+      this.validTimezoneAwareMoment.hour(parseInt(time.hour, 10));
+      this.validTimezoneAwareMoment.minute(parseInt(time.minute, 10));
+      this.validTimezoneAwareMoment.second(parseInt(time.second, 10));
+    }
+    //
+    // BUILD NEW UTC DATE
+    //
     const tz = this.validTimezoneAwareMoment.format('ZZ');
     const dateStringInCurrentTimeZone = `${date.date.year}-${this.prefixWithZero(date.date.month)}-${this.prefixWithZero(date.date.day)}T${time.hour}:${time.minute}:${time.second}.000${tz}`;
     return moment(dateStringInCurrentTimeZone).utc().format(UtcHelper.MOMENT_UTC_FORMAT);

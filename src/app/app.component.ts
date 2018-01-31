@@ -79,8 +79,8 @@ import { sharedStyles } from './app.styles';
     <div class="mt-xl"></div>
     <bdd-feature>DateTimePicker Component should be 'daylight savings time' aware</bdd-feature>
     <ul class="bdd-notes">
-      <li>For e.g. Europe/Berlin TimeZone on 25th March at 02:00 a.m the time changes to <a href="https://www.timeanddate.com/time/change/germany" target="_blank">SummerTime and the clock is set to 03:00 a.m.</a></li>
-      <li>For e.g. Europe/Berlin TimeZone on 28th October at 03:00 a.m the time changes to <a href="https://www.timeanddate.com/time/change/germany" target="_blank">WinterTime and the clock is set to 02:00 a.m.</a></li>
+      <li>For e.g. Europe/Berlin TimeZone on 25th March 2018 at 02:00 a.m the time changes to <a href="https://www.timeanddate.com/time/change/germany" target="_blank">SummerTime and the clock is set to 03:00 a.m.</a></li>
+      <li>For e.g. Europe/Berlin TimeZone on 28th October 2018 at 03:00 a.m the time changes to <a href="https://www.timeanddate.com/time/change/germany" target="_blank">WinterTime and the clock is set to 02:00 a.m.</a></li>
       <li>
         At these times the timezone internally changes from <a target="_blank" href="https://www.timeanddate.com/time/zones/cet">CET</a> (UTC Offset +0100)
         to <a target="_blank" href="https://www.timeanddate.com/time/zones/cest">CEST</a> (UTC Offset +0200).
@@ -98,6 +98,11 @@ import { sharedStyles } from './app.styles';
     <bdd-and>The UtcResultDate emitted is <bdd-code>2018-03-25T02:00:00.000+0000</bdd-code></bdd-and>
 
     <bdd-scenario>TimePicker change triggers UTC Offset change (Summer to Winter)</bdd-scenario>
+
+
+    <bdd-scenario>DatePicker change triggers UTC Offset change (Summer to Winter)</bdd-scenario>
+
+    <bdd-scenario>DatePicker change triggers UTC Offset change (Winter to Summer)</bdd-scenario>
 
 
     <div style="margin-top:200px;">
@@ -175,6 +180,7 @@ export class AppComponent implements OnInit {
     this.form.get('utcDate').valueChanges.subscribe(change => {
       const tempDate = change + '+0000';
       if (UtcHelper.isValidJavaUTCDate(tempDate)) {
+        this.validUtcDateResult = null;
         this.validUtcDate = tempDate;
         this.errorUtcDate = false;
       } else {
@@ -200,6 +206,7 @@ export class AppComponent implements OnInit {
   }
 
   processDateTimeChange(date: string) {
+    console.log('FOO', date);
     if (UtcHelper.isValidJavaUTCDate(date)) {
       this.validUtcDateResult = date;
     }
