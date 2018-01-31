@@ -61,6 +61,9 @@ var AppComponent = /** @class */ (function () {
     }
     AppComponent.prototype.ngOnInit = function () {
         var _this = this;
+        this.form.get('selectedTimeZone').valueChanges.subscribe(function () {
+            _this.validUtcDateResult = null;
+        });
         this.form.get('utcDate').valueChanges.subscribe(function (change) {
             var tempDate = change + '+0000';
             if (__WEBPACK_IMPORTED_MODULE_3__utc_helper__["a" /* default */].isValidJavaUTCDate(tempDate)) {
@@ -87,7 +90,6 @@ var AppComponent = /** @class */ (function () {
         return '';
     };
     AppComponent.prototype.processDateTimeChange = function (date) {
-        console.log('FOO', date);
         if (__WEBPACK_IMPORTED_MODULE_3__utc_helper__["a" /* default */].isValidJavaUTCDate(date)) {
             this.validUtcDateResult = date;
         }
@@ -617,6 +619,9 @@ var DateAndTimePickerFormComponent = /** @class */ (function () {
     DateAndTimePickerFormComponent.prototype.getUtcOffset = function () {
         return this.validTimezoneAwareMoment.format('ZZ');
     };
+    DateAndTimePickerFormComponent.prototype.getIsDST = function () {
+        return __WEBPACK_IMPORTED_MODULE_2_moment_timezone__(this.validTimezoneAwareMoment).tz(this.timezone).isDST();
+    };
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["z" /* Input */])(),
         __metadata("design:type", String)
@@ -633,9 +638,10 @@ var DateAndTimePickerFormComponent = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
             selector: 'app-date-and-time-picker-form',
             encapsulation: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_5" /* ViewEncapsulation */].None,
-            template: "\n    <app-mac [type]=\"timezone\" *ngIf=\"validTimezoneAwareMoment\">\n      <div *ngIf=\"!errors.utcInputInvalid\">\n        <div\n          *ngIf=\"datePicker?.formGroup\"\n          [formGroup]=\"datePicker.formGroup\"\n          style=\"width:150px;\"\n        >\n          <my-date-picker\n            selectorWidth=\"100px\"\n            [options]=\"datePicker.options\"\n            formControlName=\"date\"\n          ></my-date-picker>\n        </div>\n        <div\n          *ngIf=\"timePicker?.formGroup?.value.hour\"\n          [formGroup]=\"timePicker.formGroup\"\n          style=\"width:150px; margin-top:20px; display:flex; align-items: center;\"\n        >\n          <select formControlName=\"hour\" class=\"sharedSelect timePickerField\">\n            <option\n              [value]=\"prefixWithZero(hour)\"\n              *ngFor=\"let hour of timePicker.hours\"\n            >{{prefixWithZero(hour)}}</option>\n          </select>\n          <select formControlName=\"minute\" class=\"sharedSelect timePickerField\">\n            <option\n              [value]=\"prefixWithZero(minute)\"\n              *ngFor=\"let minute of timePicker.minutes\"\n            >{{prefixWithZero(minute)}}</option>\n          </select>\n          <select formControlName=\"second\" class=\"sharedSelect timePickerField\">\n            <option\n              [value]=\"prefixWithZero(second)\"\n              *ngFor=\"let second of timePicker.seconds\"\n            >{{prefixWithZero(second)}}</option>\n          </select>\n          <span>&nbsp;(HH:mm:ss)</span>\n        </div>\n        <div class=\"utcOffset\">\n          UTC Offset: {{getUtcOffset()}}\n        </div>\n      </div>\n    </app-mac>\n",
+            template: "\n    <app-mac [type]=\"timezone\" *ngIf=\"validTimezoneAwareMoment\">\n      <div *ngIf=\"!errors.utcInputInvalid\">\n        <div\n          *ngIf=\"datePicker?.formGroup\"\n          [formGroup]=\"datePicker.formGroup\"\n          style=\"width:150px;\"\n        >\n          <my-date-picker\n            selectorWidth=\"100px\"\n            [options]=\"datePicker.options\"\n            formControlName=\"date\"\n          ></my-date-picker>\n        </div>\n        <div\n          *ngIf=\"timePicker?.formGroup?.value.hour\"\n          [formGroup]=\"timePicker.formGroup\"\n          style=\"width:150px; margin-top:20px; display:flex; align-items: center;\"\n        >\n          <select formControlName=\"hour\" class=\"sharedSelect timePickerField\">\n            <option\n              [value]=\"prefixWithZero(hour)\"\n              *ngFor=\"let hour of timePicker.hours\"\n            >{{prefixWithZero(hour)}}</option>\n          </select>\n          <select formControlName=\"minute\" class=\"sharedSelect timePickerField\">\n            <option\n              [value]=\"prefixWithZero(minute)\"\n              *ngFor=\"let minute of timePicker.minutes\"\n            >{{prefixWithZero(minute)}}</option>\n          </select>\n          <select formControlName=\"second\" class=\"sharedSelect timePickerField\">\n            <option\n              [value]=\"prefixWithZero(second)\"\n              *ngFor=\"let second of timePicker.seconds\"\n            >{{prefixWithZero(second)}}</option>\n          </select>\n          <span>&nbsp;(HH:mm:ss)</span>\n        </div>\n        <div class=\"utcOffset\">\n          UTC Offset: {{getUtcOffset()}}\n        </div>\n        <div class=\"dst\">\n          Is <a href=\"https://momentjs.com/docs/#/query/is-daylight-saving-time/\" target=\"_blank\">DST:</a>\n          {{getIsDST() ? 'YES' : 'NO'}} <a class=\"bug\" href=\"https://github.com/moment/moment-timezone/issues/562\">(HAS BUG#562)</a>\n        </div>\n      </div>\n    </app-mac>\n",
             styles: [
                 ".img { width:100%; }",
+                ".bug { color: #C60000;}",
                 ".result { margin-top:20px; }",
                 ".timePickerField { min-width:55px; margin-right:5px; }",
                 ".utcOffset { margin-top:30px; }",
