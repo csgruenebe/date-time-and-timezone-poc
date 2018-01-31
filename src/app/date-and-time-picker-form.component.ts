@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import { IMyDateModel, IMyDpOptions } from 'mydatepicker';
 import UtcHelper from './utc-helper';
 import * as moment from 'moment-timezone';
@@ -6,6 +6,8 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { Moment } from 'moment';
 import { isString } from 'util';
 import { sharedStyles } from './app.styles';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/operator/takeUntil';
 
 @Component({
   selector: 'app-date-and-time-picker-form',
@@ -14,8 +16,8 @@ import { sharedStyles } from './app.styles';
     <app-mac [type]="timezone" *ngIf="validTimezoneAwareMoment">
       <div *ngIf="!errors.utcInputInvalid">
         <div
-          *ngIf="datePicker?.formGroup"
-          [formGroup]="datePicker.formGroup"
+          *ngIf="form"
+          [formGroup]="form"
           style="width:150px;"
         >
           <my-date-picker
@@ -25,8 +27,8 @@ import { sharedStyles } from './app.styles';
           ></my-date-picker>
         </div>
         <div
-          *ngIf="timePicker?.formGroup?.value.hour"
-          [formGroup]="timePicker.formGroup"
+          *ngIf="form?.value.hour"
+          [formGroup]="form"
           style="width:150px; margin-top:20px; display:flex; align-items: center;"
         >
           <select formControlName="hour" class="sharedSelect timePickerField">
@@ -54,7 +56,7 @@ import { sharedStyles } from './app.styles';
         </div>
         <div class="dst">
           Is <a href="https://momentjs.com/docs/#/query/is-daylight-saving-time/" target="_blank">DST:</a>
-          {{getIsDST() ? 'YES' : 'NO'}} <a class="bug" href="https://github.com/moment/moment-timezone/issues/562">(HAS BUG#562)</a>
+          {{getIsDST() ? 'YES' : 'NO'}}
         </div>
       </div>
     </app-mac>
@@ -63,16 +65,20 @@ import { sharedStyles } from './app.styles';
     `.img { width:100%; }`,
     `.bug { color: #C60000;}`,
     `.result { margin-top:20px; }`,
+    `.dst { margin-top:10px; }`,
     `.timePickerField { min-width:55px; margin-right:5px; }`,
     `.utcOffset { margin-top:30px; }`,
   ].concat(sharedStyles)
 })
-export class DateAndTimePickerFormComponent implements OnInit, OnChanges {
+export class DateAndTimePickerFormComponent implements OnInit, OnChanges, OnDestroy {
   validTimezoneAwareMoment: Moment = null;
   utcResult: string;
+  preDestroy = new Subject<boolean>();
   errors = {
     utcInputInvalid: false
   };
+  form: FormGroup;
+
   datePicker: DatePickerSettings = {
     options: {
       dateFormat: 'yyyy-mm-dd',
@@ -80,10 +86,7 @@ export class DateAndTimePickerFormComponent implements OnInit, OnChanges {
       showClearDateBtn: false,
       openSelectorOnInputClick: true,
       showInputField: true,
-    },
-    formGroup: new FormGroup({
-      date: new FormControl(null)
-    }),
+    }
   };
 
   timePicker = {
@@ -92,12 +95,7 @@ export class DateAndTimePickerFormComponent implements OnInit, OnChanges {
     seconds: Array.from(new Array(60), (val, index) => index),
     options: {
       dateFormat: 'HH:mm:ss'
-    },
-    formGroup: new FormGroup({
-      hour: new FormControl(null),
-      minute: new FormControl(null),
-      second: new FormControl(null),
-    }),
+    }
   };
 
 
@@ -118,52 +116,51 @@ export class DateAndTimePickerFormComponent implements OnInit, OnChanges {
   //
   ngOnInit() {
     this.initDateAndTimePicker();
-    this.initChangeListener();
   }
 
   ngOnChanges() {
+    this.preDestroy.next(true);
     this.initDateAndTimePicker();
   }
 
+  ngOnDestroy() {
+   this.preDestroy.next(true);
+  }
+
   initDateAndTimePicker() {
+    console.log('initDateAndTimePicker');
     const self = this;
     if (UtcHelper.isValidJavaUTCDate(this.utcDate)) {
       this.validTimezoneAwareMoment = null;
       this.validTimezoneAwareMoment = moment(this.utcDate).tz(this.timezone);
-      self.initDatePicker();
-      self.initTimePicker(this.validTimezoneAwareMoment.hour(),
-        this.validTimezoneAwareMoment.minute(),
-        this.validTimezoneAwareMoment.second());
+      console.log('initDateAndTimePicker datetime:', this.validTimezoneAwareMoment.format());
+      self.initDateTimePicker();
       this.errors.utcInputInvalid = false;
     } else {
       this.errors.utcInputInvalid = true;
     }
   }
 
-  initDatePicker() {
+  getFormattedElement(format: string) {
+    return this.validTimezoneAwareMoment.format(format);
+  }
+
+  initDateTimePicker() {
     const datePickerModel = {
       date: {
-        year: this.validTimezoneAwareMoment.year(),
-        month: this.validTimezoneAwareMoment.format('M'),
-        day: this.validTimezoneAwareMoment.format('D'),
+        year: this.getFormattedElement('YYYY'),
+        month: this.getFormattedElement('M'),
+        day: this.getFormattedElement('D'),
       }
     };
-    this.datePicker.formGroup.get('date').setValue(datePickerModel);
-  }
-
-  initTimePicker(hour: number, minute: number, second: number) {
-    this.timePicker.formGroup.get('hour').setValue(this.prefixWithZero(hour));
-    this.timePicker.formGroup.get('minute').setValue(this.prefixWithZero(minute));
-    this.timePicker.formGroup.get('second').setValue(this.prefixWithZero(second));
-  }
-
-  initChangeListener() {
-    this.datePicker.formGroup.get('date').valueChanges.subscribe((changes: FormDate) => {
-      this.utcResult = this.updateInternalMomentAndReturnUtcDate(this.timePicker.formGroup.value, changes, true);
-      this.emitChange();
+    this.form = new FormGroup({
+      date: new FormControl(datePickerModel),
+      hour: new FormControl(this.getFormattedElement('HH')),
+      minute: new FormControl(this.getFormattedElement('mm')),
+      second: new FormControl(this.getFormattedElement('ss')),
     });
-    this.timePicker.formGroup.valueChanges.subscribe((changes: FormTime) => {
-      this.utcResult = this.updateInternalMomentAndReturnUtcDate(changes, this.datePicker.formGroup.value.date, false);
+    this.form.valueChanges.takeUntil(this.preDestroy).subscribe((changes: DateTimeFormChange) => {
+      this.utcResult = this.updateInternalMomentAndReturnUtcDate(changes);
       this.emitChange();
     });
   }
@@ -178,29 +175,23 @@ export class DateAndTimePickerFormComponent implements OnInit, OnChanges {
     return temp < 10 ? `0${temp}` : `${temp}`;
   }
 
-  updateInternalMomentAndReturnUtcDate(time: FormTime, date: FormDate, updateDate) {
+  updateInternalMomentAndReturnUtcDate(change: DateTimeFormChange) {
     //
-    // UPDATE DATE (XOR UPDATE EITHER DATE OR TIME TO AVOID LOOPS)
+    // UPDATE DATE AND TIME
     //
-    if (updateDate === true) {
-      this.validTimezoneAwareMoment.year(parseInt(date.date.year, 10));
-      this.validTimezoneAwareMoment.month(parseInt(date.date.month, 10));
-      this.validTimezoneAwareMoment.day(parseInt(date.date.day, 10));
-    }
-    //
-    // UPDATE TIME (XOR UPDATE EITHER DATE OR TIME TO AVOID LOOPS)
-    //
-    if (updateDate === false) {
-      this.validTimezoneAwareMoment.hour(parseInt(time.hour, 10));
-      this.validTimezoneAwareMoment.minute(parseInt(time.minute, 10));
-      this.validTimezoneAwareMoment.second(parseInt(time.second, 10));
-    }
+    this.validTimezoneAwareMoment = moment(this.validTimezoneAwareMoment
+      .year(parseInt(change.date.date.year, 10))
+      .month(parseInt(change.date.date.month, 10) - 1) // http://momentjs.com/docs/#/get-set/month/ !!!!
+      .date(parseInt(change.date.date.day, 10))
+      .hour(parseInt(change.hour, 10))
+      .minute(parseInt(change.minute, 10))
+      .second(parseInt(change.second, 10))
+    ).tz(this.timezone);
+    console.log('updated internal datetime:', this.validTimezoneAwareMoment.format());
     //
     // BUILD NEW UTC DATE
     //
-    const tz = this.validTimezoneAwareMoment.format('ZZ');
-    const dateStringInCurrentTimeZone = `${date.date.year}-${this.prefixWithZero(date.date.month)}-${this.prefixWithZero(date.date.day)}T${time.hour}:${time.minute}:${time.second}.000${tz}`;
-    return moment(dateStringInCurrentTimeZone).utc().format(UtcHelper.MOMENT_UTC_FORMAT);
+    return moment(this.validTimezoneAwareMoment).tz(this.timezone).utc().format(UtcHelper.MOMENT_UTC_FORMAT);
   }
 
   emitChange() {
@@ -208,7 +199,7 @@ export class DateAndTimePickerFormComponent implements OnInit, OnChanges {
   }
 
   getUtcOffset() {
-    return this.validTimezoneAwareMoment.format('ZZ');
+    return moment(this.validTimezoneAwareMoment).tz(this.timezone).format('ZZ');
   }
 
   getIsDST() {
@@ -219,19 +210,17 @@ export class DateAndTimePickerFormComponent implements OnInit, OnChanges {
 
 class DatePickerSettings {
   options: IMyDpOptions;
-  formGroup: FormGroup;
 }
 
-class FormTime {
+class DateTimeFormChange {
+  date: {
+    date: {
+      year: string,
+      month: string,
+      day: string,
+    }
+  };
   second: string;
   hour: string;
   minute: string;
-}
-
-class FormDate {
-  date: {
-    year: string,
-    month: string,
-    day: string,
-  };
 }
