@@ -117,10 +117,7 @@ export class DateAndTimePickerFormComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    console.log('ngOnChanges');
-    if (this.utcDate !== this.utcResult) {
-      this.initDateAndTimePicker();
-    }
+    this.initDateAndTimePicker();
   }
 
   initDateAndTimePicker() {
@@ -180,10 +177,7 @@ export class DateAndTimePickerFormComponent implements OnInit, OnChanges {
   }
 
   emitChange() {
-    // ONLY EMIT IF INPUT IS DIFFERENT THAN OUTPUT
-    if (this.utcDate !== this.utcResult) {
-      this.changed.emit(this.utcResult);
-    }
+    this.changed.emit(this.utcResult);
   }
 
   getUtcOffset() {
