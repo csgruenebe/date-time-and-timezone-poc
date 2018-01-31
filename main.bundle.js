@@ -64,6 +64,7 @@ var AppComponent = /** @class */ (function () {
         this.form.get('utcDate').valueChanges.subscribe(function (change) {
             var tempDate = change + '+0000';
             if (__WEBPACK_IMPORTED_MODULE_3__utc_helper__["a" /* default */].isValidJavaUTCDate(tempDate)) {
+                _this.validUtcDateResult = null;
                 _this.validUtcDate = tempDate;
                 _this.errorUtcDate = false;
             }
@@ -86,6 +87,7 @@ var AppComponent = /** @class */ (function () {
         return '';
     };
     AppComponent.prototype.processDateTimeChange = function (date) {
+        console.log('FOO', date);
         if (__WEBPACK_IMPORTED_MODULE_3__utc_helper__["a" /* default */].isValidJavaUTCDate(date)) {
             this.validUtcDateResult = date;
         }
@@ -93,10 +95,10 @@ var AppComponent = /** @class */ (function () {
     AppComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
             selector: 'app-root',
-            template: "\n  <div class=\"header\">\n    <div class=\"container\">\n      <h1 class=\"headline\">UTC Date Time and Timezone Flow Proof of Concept</h1>\n    </div>\n  </div>\n  <div class=\"container\">\n\n    <div class=\"row\">\n      <div class=\"col\">\n        <app-utc-date-flow-diagram style=\"width:80%;\"></app-utc-date-flow-diagram>\n      </div>\n    </div>\n\n    <div class=\"row mt-m\">\n      <div class=\"col\">\n        <div>\n          <h3>1. Set UTC DateTime in Database</h3>\n          <app-mac type=\"Database\">\n            <form [formGroup]=\"form\" class=\"form\">\n              <div class=\"fieldlabel\">UTC</div>\n              <input\n                class=\"sharedField\"\n                [class.sharedFieldHasError]=\"errorUtcDate\"\n                style=\"width:195px\" type=\"text\" formControlName=\"utcDate\" />\n              <div class=\"fieldafter\">\n                +0000\n              </div>\n            </form>\n            <div class=\"errorUtcDate\" *ngIf=\"errorUtcDate\">\n              Not a valid UTC Date in form of <br>2018-08-20T12:00:00.000+0000\n            </div>\n          </app-mac>\n        </div>\n      </div>\n      <div class=\"col\">\n        <div [formGroup]=\"form\">\n          <h3>2. Select TimeZone</h3>\n          <select\n            formControlName=\"selectedTimeZone\"\n            class=\"sharedSelect timeZoneSelect\">\n            <option\n              [value]=\"availableTimeZone.tz\"\n              *ngFor=\"let availableTimeZone of availableTimeZonesAndDateFormats\"\n            >{{availableTimeZone.tz}}</option>\n          </select>\n        </div>\n      </div>\n      <div class=\"col\">\n        <div>\n          <h3>3. Use DatePicker</h3>\n          <app-date-and-time-picker-form\n            *ngIf=\"form?.value?.selectedTimeZone\"\n            [utcDate]=\"validUtcDate\"\n            [timezone]=\"form.value.selectedTimeZone\"\n            (changed)=\"processDateTimeChange($event)\"\n          ></app-date-and-time-picker-form>\n        </div>\n      </div>\n      <div class=\"col\">\n        <div>\n          <h3>4. Utc Result for DB</h3>\n          <div class=\"utcResult\">{{validUtcDateResult ? validUtcDateResult : '...' }}</div>\n        </div>\n      </div>\n    </div>\n\n\n    <h2 class=\"mt-xl\">Daylight Saving Time</h2>\n\n    <p>On 25-03-2018 at 02:00 a.m time changes to SummerTime in Europe/Berlin/CET meaning the Clock is set to 03:00 a.m.</p>\n    <p>\n      That means internally the Timezone changes from\n      <a target=\"_blank\" href=\"https://www.timeanddate.com/time/zones/cet\">CET</a> (UTC+0100)\n      to <a target=\"_blank\" href=\"https://www.timeanddate.com/time/zones/cest\">CEST</a> (UTC+0200).\n    </p>\n\n    <div style=\"margin-top:200px;\">\n      Used Frameworks\n      - <a href=\"https://momentjs.com/\">Moment</a>\n      - <a href=\"https://momentjs.com/timezone/\">Moment Timezone</a>\n      - <a href=\"https://github.com/kekeh/mydatepicker\">kekeh/mydatepicker</a>\n    </div>\n\n\n  </div>\n  ",
+            template: "\n  <div class=\"header\">\n    <div class=\"container\">\n      <h1 class=\"headline\">UTC DateTime and TimeZone Flow Proof of Concept</h1>\n    </div>\n  </div>\n  <div class=\"container\">\n\n    <div class=\"row\">\n      <div class=\"col\">\n        <app-utc-date-flow-diagram style=\"width:80%;\"></app-utc-date-flow-diagram>\n      </div>\n    </div>\n\n    <div class=\"row mt-m\">\n      <div class=\"col\">\n        <div>\n          <h3>1. Set UTC DateTime in Database</h3>\n          <app-mac type=\"Database\">\n            <form [formGroup]=\"form\" class=\"form\">\n              <div class=\"fieldlabel\">UTC</div>\n              <input\n                class=\"sharedField\"\n                [class.sharedFieldHasError]=\"errorUtcDate\"\n                style=\"width:195px\" type=\"text\" formControlName=\"utcDate\" />\n              <div class=\"fieldafter\">\n                +0000\n              </div>\n            </form>\n            <div class=\"errorUtcDate\" *ngIf=\"errorUtcDate\">\n              Not a valid UTC Date in form of <br>2018-08-20T12:00:00.000+0000\n            </div>\n          </app-mac>\n        </div>\n      </div>\n      <div class=\"col\">\n        <div [formGroup]=\"form\">\n          <h3>2. Select TimeZone</h3>\n          <select\n            formControlName=\"selectedTimeZone\"\n            class=\"sharedSelect timeZoneSelect\">\n            <option\n              [value]=\"availableTimeZone.tz\"\n              *ngFor=\"let availableTimeZone of availableTimeZonesAndDateFormats\"\n            >{{availableTimeZone.tz}}</option>\n          </select>\n        </div>\n      </div>\n      <div class=\"col\">\n        <div>\n          <h3>3. Use DatePicker</h3>\n          <app-date-and-time-picker-form\n            *ngIf=\"form?.value?.selectedTimeZone\"\n            [utcDate]=\"validUtcDate\"\n            [timezone]=\"form.value.selectedTimeZone\"\n            (changed)=\"processDateTimeChange($event)\"\n          ></app-date-and-time-picker-form>\n        </div>\n      </div>\n      <div class=\"col\">\n        <div>\n          <h3>4. Utc Result for DB</h3>\n          <div class=\"utcResult\">{{validUtcDateResult ? validUtcDateResult : '...' }}</div>\n        </div>\n      </div>\n    </div>\n\n\n\n    <div class=\"mt-xl\"></div>\n    <bdd-feature>DateTimePicker Component should be 'daylight savings time' aware</bdd-feature>\n    <ul class=\"bdd-notes\">\n      <li>For e.g. Europe/Berlin TimeZone on 25th March 2018 at 02:00 a.m the time changes to <a href=\"https://www.timeanddate.com/time/change/germany\" target=\"_blank\">SummerTime and the clock is set to 03:00 a.m.</a></li>\n      <li>For e.g. Europe/Berlin TimeZone on 28th October 2018 at 03:00 a.m the time changes to <a href=\"https://www.timeanddate.com/time/change/germany\" target=\"_blank\">WinterTime and the clock is set to 02:00 a.m.</a></li>\n      <li>\n        At these times the timezone internally changes from <a target=\"_blank\" href=\"https://www.timeanddate.com/time/zones/cet\">CET</a> (UTC Offset +0100)\n        to <a target=\"_blank\" href=\"https://www.timeanddate.com/time/zones/cest\">CEST</a> (UTC Offset +0200).\n      </li>\n      <li>The DateTimePicker Component consists of a DatePicker (Year, Month, Day) and a TimePicker (Hour, Minute, Second).</li>\n      <li>The DateTimePicker emits a UtcResultDate String on change.</li>\n    </ul>\n\n    <bdd-scenario>TimePicker change triggers UTC Offset change (Winter to Summer)</bdd-scenario>\n    <bdd-given>The Database Date is <bdd-code>2018-03-24T23:00:00.000+0000</bdd-code></bdd-given>\n    <bdd-and>The TimeZone is <bdd-code>Europe/Berlin</bdd-code></bdd-and>\n    <bdd-and>The DateTimePicker Component initialized to DatePicker <bdd-code>2018-03-25</bdd-code> and TimePicker <bdd-code>00:00:00</bdd-code> with UTC Offset <bdd-code>+0100</bdd-code></bdd-and>\n    <bdd-when>The User changes TimePicker to <bdd-code>04:00:00</bdd-code></bdd-when>\n    <bdd-then>The UTC Offset changes to <bdd-code>+0200</bdd-code></bdd-then>\n    <bdd-and>The UtcResultDate emitted is <bdd-code>2018-03-25T02:00:00.000+0000</bdd-code></bdd-and>\n\n    <bdd-scenario>TimePicker change triggers UTC Offset change (Summer to Winter)</bdd-scenario>\n\n\n    <bdd-scenario>DatePicker change triggers UTC Offset change (Summer to Winter)</bdd-scenario>\n\n    <bdd-scenario>DatePicker change triggers UTC Offset change (Winter to Summer)</bdd-scenario>\n\n\n    <div style=\"margin-top:200px;\">\n      Used Frameworks\n      - <a href=\"https://momentjs.com/\">Moment</a>\n      - <a href=\"https://momentjs.com/timezone/\">Moment Timezone</a>\n      - <a href=\"https://github.com/kekeh/mydatepicker\">kekeh/mydatepicker</a>\n    </div>\n  </div>\n  ",
             styles: [
-                ".header {\n      background-color:#407F7F;\n      padding:20px;\n    }",
-                ".headline {\n      color:#fff;\n      margin:0;\n    }",
+                ".header {\n      background-color:#268383;\n      padding:20px;\n    }",
+                ".headline {\n      color:#fff;\n      margin:0;\n      font-weight:300;\n    }",
                 ".container {\n      max-width:1600px;\n      margin: 0 auto;\n      padding:20px;\n    }",
                 ".form {\n      display:flex;\n      margin-top:6px;\n      align-items: center;\n    }",
                 ".fieldlabel {\n      font-weight: 500;\n      width:40px;\n    }",
@@ -104,8 +106,8 @@ var AppComponent = /** @class */ (function () {
                 ".timeZoneSelect {\n      max-width:180px;\n      margin-top:40px;\n    }",
                 ".errorUtcDate {\n      background-color:#C60000;\n      color:#fff;\n      padding:4px;\n      margin-top:5px;\n    }",
                 ".utcResult { font-family: 'Roboto Mono', monospace; min-width:300px; margin-top:60px;}",
-                ".mt-m { margin-top:30px; }",
-                ".mt-xl { margin-top:100px; }",
+                ".mt-m { margin-top:30px !important; }",
+                ".mt-xl { margin-top:100px !important; }",
                 ".label { width:90px; display:inline-block; }",
                 '.row { display:flex; flex-direction: row; flex-wrap: wrap; }',
                 '.col { flex:1; display: flex; flex-direction: row; justify-content: center; align-items: flex-start; }',
@@ -139,12 +141,26 @@ var TimeZoneAndDateFormat = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__angular_forms__ = __webpack_require__("../../../forms/esm5/forms.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__angular_common__ = __webpack_require__("../../../common/esm5/common.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__date_and_time_picker_form_component__ = __webpack_require__("../../../../../src/app/date-and-time-picker-form.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__bdd_bdd_when_component__ = __webpack_require__("../../../../../src/app/bdd/bdd-when.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__bdd_bdd_then_component__ = __webpack_require__("../../../../../src/app/bdd/bdd-then.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__bdd_bdd_and_component__ = __webpack_require__("../../../../../src/app/bdd/bdd-and.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__bdd_bdd_scenario_component__ = __webpack_require__("../../../../../src/app/bdd/bdd-scenario.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__bdd_bdd_given_component__ = __webpack_require__("../../../../../src/app/bdd/bdd-given.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__bdd_bdd_feature_component__ = __webpack_require__("../../../../../src/app/bdd/bdd-feature.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__bdd_bdd_code_component__ = __webpack_require__("../../../../../src/app/bdd/bdd-code.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
+
+
+
+
+
+
 
 
 
@@ -164,6 +180,13 @@ var AppModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_4__mac_component__["a" /* MacComponent */],
                 __WEBPACK_IMPORTED_MODULE_5__utc_date_flow_diagram_component__["a" /* UtcDateFlowDiagramComponent */],
                 __WEBPACK_IMPORTED_MODULE_8__date_and_time_picker_form_component__["a" /* DateAndTimePickerFormComponent */],
+                __WEBPACK_IMPORTED_MODULE_12__bdd_bdd_scenario_component__["a" /* BddScenarioComponent */],
+                __WEBPACK_IMPORTED_MODULE_11__bdd_bdd_and_component__["a" /* BddAndComponent */],
+                __WEBPACK_IMPORTED_MODULE_10__bdd_bdd_then_component__["a" /* BddThenComponent */],
+                __WEBPACK_IMPORTED_MODULE_9__bdd_bdd_when_component__["a" /* BddWhenComponent */],
+                __WEBPACK_IMPORTED_MODULE_13__bdd_bdd_given_component__["a" /* BddGivenComponent */],
+                __WEBPACK_IMPORTED_MODULE_14__bdd_bdd_feature_component__["a" /* BddFeatureComponent */],
+                __WEBPACK_IMPORTED_MODULE_15__bdd_bdd_code_component__["a" /* BddCodeComponent */],
             ],
             imports: [
                 __WEBPACK_IMPORTED_MODULE_7__angular_common__["a" /* CommonModule */],
@@ -189,7 +212,7 @@ var AppModule = /** @class */ (function () {
 /* unused harmony export colors */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return sharedStyles; });
 var colors = {
-    primary: '#407F7F',
+    primary: '#268383',
     error: '#C60000',
 };
 var sharedStyles = [
@@ -199,7 +222,247 @@ var sharedStyles = [
     ".sharedSelecthasError {\n    border-bottom:2px solid " + colors.error + ";\n  }",
     /* MY DATEPICKER OVERRIDES */
     "\n  .mydp {\n    border:0 !important;\n    border-radius:0 !important;\n  }\n  .inputnoteditable {\n    border:0 !important;\n    font-size:1rem !important;\n    font-family: 'Roboto', sans-serif !important;\n    padding:5px 10px 5px 10px  !important;\n    background-color:#fafafa !important;\n  }\n  .selectiongroup {\n    border:0 !important;\n    border-radius:0 !important;\n    border-bottom:2px solid " + colors.primary + " !important;\n  }",
+    /* BDD STYLES */
+    ".bdd-feature-label {\n    font-size:1.5rem;\n    color: " + colors.primary + ";\n    margin-right:5px;\n  }",
+    ".bdd-feature-text {\n    font-size:1.5rem;\n    color: #333;\n  }",
+    ".bdd-spacer {\n    margin-top:20px !important;\n  }",
+    ".bdd-notes {\n    margin:0;\n    margin-top:10px;\n  }\n  .bdd-notes li {\n    line-height:1.1rem;\n    font-size:0.8rem;\n    color:#777;\n    padding-bottom:5px;\n  }",
+    ".bdd-notes a {\n    color:#777;\n  }",
+    ".bdd-scenario-label {\n    color: #7D1515;\n    font-weight:bold;\n    font-size:1.2rem;\n    margin-left:10px;\n  }",
+    ".bdd-scenario-text {\n    font-size:1.2rem;\n    margin-left:5px;\n  }",
+    ".bdd-code {\n    font-family: 'Rboto Mono', monospace;\n    background-color:#f4f4f4;\n    font-size:0.9rem;\n  }",
+    ".bdd-row {\n    display:flex;\n    margin-top:5px;\n  }",
+    ".bdd-given-label, .bdd-and-label, .bdd-when-label, .bdd-then-label {\n    font-weight:bold;\n    text-align:right;\n    width:89px;\n    min-width:89px;\n    margin-right: 5px;\n  }",
+    ".bdd-given-label { color: #268383; }",
+    ".bdd-and-label { color: #9CCC3C; }",
+    ".bdd-when-label { color: #DB8640; }",
+    ".bdd-then-label { color: #DB4040; }",
+    ".bdd-given-text, .bdd-and-text, .bdd-when-text, .bdd-then-text {\n    color: #333;\n  }",
 ];
+
+
+/***/ }),
+
+/***/ "../../../../../src/app/bdd/bdd-and.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BddAndComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_styles__ = __webpack_require__("../../../../../src/app/app.styles.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+
+var BddAndComponent = /** @class */ (function () {
+    function BddAndComponent() {
+    }
+    BddAndComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
+            selector: 'bdd-and',
+            template: "\n    <div class=\"bdd-row\">\n      <div class=\"bdd-and-label\">And:</div>\n      <div class=\"bdd-and-text\"><ng-content></ng-content></div>\n    </div>\n  ",
+            styles: [].concat(__WEBPACK_IMPORTED_MODULE_1__app_styles__["a" /* sharedStyles */])
+        })
+    ], BddAndComponent);
+    return BddAndComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "../../../../../src/app/bdd/bdd-code.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BddCodeComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_styles__ = __webpack_require__("../../../../../src/app/app.styles.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+
+var BddCodeComponent = /** @class */ (function () {
+    function BddCodeComponent() {
+    }
+    BddCodeComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
+            selector: 'bdd-code',
+            template: "<span class=\"bdd-code\"><ng-content></ng-content></span>",
+            styles: [].concat(__WEBPACK_IMPORTED_MODULE_1__app_styles__["a" /* sharedStyles */])
+        })
+    ], BddCodeComponent);
+    return BddCodeComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "../../../../../src/app/bdd/bdd-feature.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BddFeatureComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_styles__ = __webpack_require__("../../../../../src/app/app.styles.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+
+var BddFeatureComponent = /** @class */ (function () {
+    function BddFeatureComponent() {
+    }
+    BddFeatureComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
+            selector: 'bdd-feature',
+            template: "\n    <div class=\"bdd-row\">\n      <div class=\"bdd-feature-label\">Feature:</div>\n      <div class=\"bdd-feature-text\"><ng-content></ng-content></div>\n    </div>\n  ",
+            styles: [].concat(__WEBPACK_IMPORTED_MODULE_1__app_styles__["a" /* sharedStyles */])
+        })
+    ], BddFeatureComponent);
+    return BddFeatureComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "../../../../../src/app/bdd/bdd-given.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BddGivenComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_styles__ = __webpack_require__("../../../../../src/app/app.styles.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+
+var BddGivenComponent = /** @class */ (function () {
+    function BddGivenComponent() {
+    }
+    BddGivenComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
+            selector: 'bdd-given',
+            template: "\n    <div class=\"bdd-row\">\n      <div class=\"bdd-given-label\">Given:</div>\n      <div class=\"bdd-given-text\"><ng-content></ng-content></div>\n    </div>\n  ",
+            styles: [].concat(__WEBPACK_IMPORTED_MODULE_1__app_styles__["a" /* sharedStyles */])
+        })
+    ], BddGivenComponent);
+    return BddGivenComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "../../../../../src/app/bdd/bdd-scenario.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BddScenarioComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_styles__ = __webpack_require__("../../../../../src/app/app.styles.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+
+var BddScenarioComponent = /** @class */ (function () {
+    function BddScenarioComponent() {
+    }
+    BddScenarioComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
+            selector: 'bdd-scenario',
+            template: "\n    <div class=\"bdd-row\" style=\"margin-top:20px;\">\n      <div class=\"bdd-scenario-label\">Scenario:</div>\n      <div class=\"bdd-scenario-text\"><ng-content></ng-content></div>\n    </div>\n  ",
+            styles: [].concat(__WEBPACK_IMPORTED_MODULE_1__app_styles__["a" /* sharedStyles */])
+        })
+    ], BddScenarioComponent);
+    return BddScenarioComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "../../../../../src/app/bdd/bdd-then.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BddThenComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_styles__ = __webpack_require__("../../../../../src/app/app.styles.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+
+var BddThenComponent = /** @class */ (function () {
+    function BddThenComponent() {
+    }
+    BddThenComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
+            selector: 'bdd-then',
+            template: "\n    <div class=\"bdd-row\">\n      <div class=\"bdd-then-label\">Then:</div>\n      <div class=\"bdd-then-text\"><ng-content></ng-content></div>\n    </div>\n  ",
+            styles: [].concat(__WEBPACK_IMPORTED_MODULE_1__app_styles__["a" /* sharedStyles */])
+        })
+    ], BddThenComponent);
+    return BddThenComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "../../../../../src/app/bdd/bdd-when.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BddWhenComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_styles__ = __webpack_require__("../../../../../src/app/app.styles.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+
+var BddWhenComponent = /** @class */ (function () {
+    function BddWhenComponent() {
+    }
+    BddWhenComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
+            selector: 'bdd-when',
+            template: "\n    <div class=\"bdd-row\">\n      <div class=\"bdd-when-label\">When:</div>\n      <div class=\"bdd-when-text\"><ng-content></ng-content></div>\n    </div>\n  ",
+            styles: [].concat(__WEBPACK_IMPORTED_MODULE_1__app_styles__["a" /* sharedStyles */])
+        })
+    ], BddWhenComponent);
+    return BddWhenComponent;
+}());
+
 
 
 /***/ }),
@@ -276,10 +539,12 @@ var DateAndTimePickerFormComponent = /** @class */ (function () {
         this.initDateAndTimePicker();
     };
     DateAndTimePickerFormComponent.prototype.initDateAndTimePicker = function () {
+        var self = this;
         if (__WEBPACK_IMPORTED_MODULE_1__utc_helper__["a" /* default */].isValidJavaUTCDate(this.utcDate)) {
+            this.validTimezoneAwareMoment = null;
             this.validTimezoneAwareMoment = __WEBPACK_IMPORTED_MODULE_2_moment_timezone__(this.utcDate).tz(this.timezone);
-            this.initDatePicker();
-            this.initTimePicker();
+            self.initDatePicker();
+            self.initTimePicker(this.validTimezoneAwareMoment.hour(), this.validTimezoneAwareMoment.minute(), this.validTimezoneAwareMoment.second());
             this.errors.utcInputInvalid = false;
         }
         else {
@@ -289,27 +554,26 @@ var DateAndTimePickerFormComponent = /** @class */ (function () {
     DateAndTimePickerFormComponent.prototype.initDatePicker = function () {
         var datePickerModel = {
             date: {
-                year: parseInt(this.validTimezoneAwareMoment.format('YYYY'), 10),
-                month: parseInt(this.validTimezoneAwareMoment.format('M'), 10),
-                day: parseInt(this.validTimezoneAwareMoment.format('D'), 10),
+                year: this.validTimezoneAwareMoment.year(),
+                month: this.validTimezoneAwareMoment.format('M'),
+                day: this.validTimezoneAwareMoment.format('D'),
             }
         };
         this.datePicker.formGroup.get('date').setValue(datePickerModel);
     };
-    DateAndTimePickerFormComponent.prototype.initTimePicker = function () {
-        this.timePicker.formGroup.get('hour').setValue(this.validTimezoneAwareMoment.format('HH'));
-        this.timePicker.formGroup.get('minute').setValue(this.validTimezoneAwareMoment.format('mm'));
-        this.timePicker.formGroup.get('second').setValue(this.validTimezoneAwareMoment.format('ss'));
+    DateAndTimePickerFormComponent.prototype.initTimePicker = function (hour, minute, second) {
+        this.timePicker.formGroup.get('hour').setValue(this.prefixWithZero(hour));
+        this.timePicker.formGroup.get('minute').setValue(this.prefixWithZero(minute));
+        this.timePicker.formGroup.get('second').setValue(this.prefixWithZero(second));
     };
     DateAndTimePickerFormComponent.prototype.initChangeListener = function () {
         var _this = this;
-        console.log('initChangeListener');
         this.datePicker.formGroup.get('date').valueChanges.subscribe(function (changes) {
-            _this.utcResult = _this.buildJavaUtcResultDate(_this.timePicker.formGroup.value, changes);
+            _this.utcResult = _this.updateInternalMomentAndReturnUtcDate(_this.timePicker.formGroup.value, changes, true);
             _this.emitChange();
         });
         this.timePicker.formGroup.valueChanges.subscribe(function (changes) {
-            _this.utcResult = _this.buildJavaUtcResultDate(changes, _this.datePicker.formGroup.value.date);
+            _this.utcResult = _this.updateInternalMomentAndReturnUtcDate(changes, _this.datePicker.formGroup.value.date, false);
             _this.emitChange();
         });
     };
@@ -323,7 +587,26 @@ var DateAndTimePickerFormComponent = /** @class */ (function () {
         }
         return temp < 10 ? "0" + temp : "" + temp;
     };
-    DateAndTimePickerFormComponent.prototype.buildJavaUtcResultDate = function (time, date) {
+    DateAndTimePickerFormComponent.prototype.updateInternalMomentAndReturnUtcDate = function (time, date, updateDate) {
+        //
+        // UPDATE DATE (XOR UPDATE EITHER DATE OR TIME TO AVOID LOOPS)
+        //
+        if (updateDate === true) {
+            this.validTimezoneAwareMoment.year(parseInt(date.date.year, 10));
+            this.validTimezoneAwareMoment.month(parseInt(date.date.month, 10));
+            this.validTimezoneAwareMoment.day(parseInt(date.date.day, 10));
+        }
+        //
+        // UPDATE TIME (XOR UPDATE EITHER DATE OR TIME TO AVOID LOOPS)
+        //
+        if (updateDate === false) {
+            this.validTimezoneAwareMoment.hour(parseInt(time.hour, 10));
+            this.validTimezoneAwareMoment.minute(parseInt(time.minute, 10));
+            this.validTimezoneAwareMoment.second(parseInt(time.second, 10));
+        }
+        //
+        // BUILD NEW UTC DATE
+        //
         var tz = this.validTimezoneAwareMoment.format('ZZ');
         var dateStringInCurrentTimeZone = date.date.year + "-" + this.prefixWithZero(date.date.month) + "-" + this.prefixWithZero(date.date.day) + "T" + time.hour + ":" + time.minute + ":" + time.second + ".000" + tz;
         return __WEBPACK_IMPORTED_MODULE_2_moment_timezone__(dateStringInCurrentTimeZone).utc().format(__WEBPACK_IMPORTED_MODULE_1__utc_helper__["a" /* default */].MOMENT_UTC_FORMAT);
@@ -350,7 +633,7 @@ var DateAndTimePickerFormComponent = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
             selector: 'app-date-and-time-picker-form',
             encapsulation: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_5" /* ViewEncapsulation */].None,
-            template: "\n    <app-mac [type]=\"timezone\">\n      <div *ngIf=\"!errors.utcInputInvalid\">\n        <div\n          *ngIf=\"datePicker?.formGroup\"\n          [formGroup]=\"datePicker.formGroup\"\n          style=\"width:150px;\"\n        >\n          <my-date-picker\n            selectorWidth=\"100px\"\n            [options]=\"datePicker.options\"\n            formControlName=\"date\"\n          ></my-date-picker>\n        </div>\n        <div\n          *ngIf=\"timePicker?.formGroup?.value.hour\"\n          [formGroup]=\"timePicker.formGroup\"\n          style=\"width:150px; margin-top:20px; display:flex; align-items: center;\"\n        >\n          <select formControlName=\"hour\" class=\"sharedSelect timePickerField\">\n            <option\n              [value]=\"prefixWithZero(hour)\"\n              *ngFor=\"let hour of timePicker.hours\"\n            >{{prefixWithZero(hour)}}</option>\n          </select>\n          <select formControlName=\"minute\" class=\"sharedSelect timePickerField\">\n            <option\n              [value]=\"prefixWithZero(minute)\"\n              *ngFor=\"let minute of timePicker.minutes\"\n            >{{prefixWithZero(minute)}}</option>\n          </select>\n          <select formControlName=\"second\" class=\"sharedSelect timePickerField\">\n            <option\n              [value]=\"prefixWithZero(second)\"\n              *ngFor=\"let second of timePicker.seconds\"\n            >{{prefixWithZero(second)}}</option>\n          </select>\n          <span>&nbsp;(HH:mm:ss)</span>\n        </div>\n        <div class=\"utcOffset\">\n          UTC Offset: {{getUtcOffset()}}\n        </div>\n      </div>\n    </app-mac>\n",
+            template: "\n    <app-mac [type]=\"timezone\" *ngIf=\"validTimezoneAwareMoment\">\n      <div *ngIf=\"!errors.utcInputInvalid\">\n        <div\n          *ngIf=\"datePicker?.formGroup\"\n          [formGroup]=\"datePicker.formGroup\"\n          style=\"width:150px;\"\n        >\n          <my-date-picker\n            selectorWidth=\"100px\"\n            [options]=\"datePicker.options\"\n            formControlName=\"date\"\n          ></my-date-picker>\n        </div>\n        <div\n          *ngIf=\"timePicker?.formGroup?.value.hour\"\n          [formGroup]=\"timePicker.formGroup\"\n          style=\"width:150px; margin-top:20px; display:flex; align-items: center;\"\n        >\n          <select formControlName=\"hour\" class=\"sharedSelect timePickerField\">\n            <option\n              [value]=\"prefixWithZero(hour)\"\n              *ngFor=\"let hour of timePicker.hours\"\n            >{{prefixWithZero(hour)}}</option>\n          </select>\n          <select formControlName=\"minute\" class=\"sharedSelect timePickerField\">\n            <option\n              [value]=\"prefixWithZero(minute)\"\n              *ngFor=\"let minute of timePicker.minutes\"\n            >{{prefixWithZero(minute)}}</option>\n          </select>\n          <select formControlName=\"second\" class=\"sharedSelect timePickerField\">\n            <option\n              [value]=\"prefixWithZero(second)\"\n              *ngFor=\"let second of timePicker.seconds\"\n            >{{prefixWithZero(second)}}</option>\n          </select>\n          <span>&nbsp;(HH:mm:ss)</span>\n        </div>\n        <div class=\"utcOffset\">\n          UTC Offset: {{getUtcOffset()}}\n        </div>\n      </div>\n    </app-mac>\n",
             styles: [
                 ".img { width:100%; }",
                 ".result { margin-top:20px; }",
