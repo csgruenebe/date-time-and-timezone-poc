@@ -10,7 +10,7 @@ import { sharedStyles } from './app.styles';
   template: `
   <div class="header">
     <div class="container">
-      <h1 class="headline">UTC Date Time and Timezone Flow Proof of Concept</h1>
+      <h1 class="headline">UTC DateTime and TimeZone Flow Proof of Concept</h1>
     </div>
   </div>
   <div class="container">
@@ -75,14 +75,30 @@ import { sharedStyles } from './app.styles';
     </div>
 
 
-    <h2 class="mt-xl">Daylight Saving Time</h2>
 
-    <p>On 25-03-2018 at 02:00 a.m time changes to SummerTime in Europe/Berlin/CET meaning the Clock is set to 03:00 a.m.</p>
-    <p>
-      That means internally the Timezone changes from
-      <a target="_blank" href="https://www.timeanddate.com/time/zones/cet">CET</a> (UTC+0100)
-      to <a target="_blank" href="https://www.timeanddate.com/time/zones/cest">CEST</a> (UTC+0200).
-    </p>
+    <div class="mt-xl"></div>
+    <bdd-feature>DateTimePicker Component should be 'daylight savings time' aware</bdd-feature>
+    <ul class="bdd-notes">
+      <li>For e.g. Europe/Berlin TimeZone on 25th March at 02:00 a.m the time changes to <a href="https://www.timeanddate.com/time/change/germany" target="_blank">SummerTime and the clock is set to 03:00 a.m.</a></li>
+      <li>For e.g. Europe/Berlin TimeZone on 28th October at 03:00 a.m the time changes to <a href="https://www.timeanddate.com/time/change/germany" target="_blank">WinterTime and the clock is set to 02:00 a.m.</a></li>
+      <li>
+        At these times the timezone internally changes from <a target="_blank" href="https://www.timeanddate.com/time/zones/cet">CET</a> (UTC Offset +0100)
+        to <a target="_blank" href="https://www.timeanddate.com/time/zones/cest">CEST</a> (UTC Offset +0200).
+      </li>
+      <li>The DateTimePicker Component consists of a DatePicker (Year, Month, Day) and a TimePicker (Hour, Minute, Second).</li>
+      <li>The DateTimePicker emits a UtcResultDate String on change.</li>
+    </ul>
+
+    <bdd-scenario>TimePicker change triggers UTC Offset change (Winter to Summer)</bdd-scenario>
+    <bdd-given>The Database Date is <bdd-code>2018-03-24T23:00:00.000+0000</bdd-code></bdd-given>
+    <bdd-and>The TimeZone is <bdd-code>Europe/Berlin</bdd-code></bdd-and>
+    <bdd-and>The DateTimePicker Component initialized to DatePicker <bdd-code>2018-03-25</bdd-code> and TimePicker <bdd-code>00:00:00</bdd-code> with UTC Offset <bdd-code>+0100</bdd-code></bdd-and>
+    <bdd-when>The User changes TimePicker to <bdd-code>04:00:00</bdd-code></bdd-when>
+    <bdd-then>The UTC Offset changes to <bdd-code>+0200</bdd-code></bdd-then>
+    <bdd-and>The UtcResultDate emitted is <bdd-code>2018-03-25T02:00:00.000+0000</bdd-code></bdd-and>
+
+    <bdd-scenario>TimePicker change triggers UTC Offset change (Summer to Winter)</bdd-scenario>
+
 
     <div style="margin-top:200px;">
       Used Frameworks
@@ -90,18 +106,17 @@ import { sharedStyles } from './app.styles';
       - <a href="https://momentjs.com/timezone/">Moment Timezone</a>
       - <a href="https://github.com/kekeh/mydatepicker">kekeh/mydatepicker</a>
     </div>
-
-
   </div>
   `,
   styles: [
     `.header {
-      background-color:#407F7F;
+      background-color:#268383;
       padding:20px;
     }`,
     `.headline {
       color:#fff;
       margin:0;
+      font-weight:300;
     }`,
     `.container {
       max-width:1600px;
@@ -132,8 +147,8 @@ import { sharedStyles } from './app.styles';
       margin-top:5px;
     }`,
     `.utcResult { font-family: 'Roboto Mono', monospace; min-width:300px; margin-top:60px;}`,
-    `.mt-m { margin-top:30px; }`,
-    `.mt-xl { margin-top:100px; }`,
+    `.mt-m { margin-top:30px !important; }`,
+    `.mt-xl { margin-top:100px !important; }`,
     `.label { width:90px; display:inline-block; }`,
     '.row { display:flex; flex-direction: row; flex-wrap: wrap; }',
     '.col { flex:1; display: flex; flex-direction: row; justify-content: center; align-items: flex-start; }',

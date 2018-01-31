@@ -1,4 +1,4 @@
 <!-- Firefox cannot display inline-svgs and needs a URL to the SVG -->
 <svg height="20" viewBox="0 0 260 190" xmlns="http://www.w3.org/2000/svg">
-  <path fill="#407F7F" d="M75 62h131l-65.5 66.317" fill-rule="evenodd"/>
+  <path fill="#268383" d="M75 62h131l-65.5 66.317" fill-rule="evenodd"/>
 </svg>

@@ -1,5 +1,5 @@
 export const colors = {
-  primary: '#407F7F',
+  primary: '#268383',
   error: '#C60000',
 };
 export const sharedStyles = [
@@ -53,5 +53,64 @@ export const sharedStyles = [
     border:0 !important;
     border-radius:0 !important;
     border-bottom:2px solid ${colors.primary} !important;
+  }`,
+  /* BDD STYLES */
+  `.bdd-feature-label {
+    font-size:1.5rem;
+    color: ${colors.primary};
+    margin-right:5px;
+  }`,
+  `.bdd-feature-text {
+    font-size:1.5rem;
+    color: #333;
+  }`,
+  `.bdd-spacer {
+    margin-top:20px !important;
+  }`,
+  `.bdd-notes {
+    margin:0;
+    margin-top:10px;
+  }
+  .bdd-notes li {
+    line-height:1.1rem;
+    font-size:0.8rem;
+    color:#777;
+    padding-bottom:5px;
+  }`,
+  `.bdd-notes a {
+    color:#777;
+  }`,
+  `.bdd-scenario-label {
+    color: #7D1515;
+    font-weight:bold;
+    font-size:1.2rem;
+    margin-left:10px;
+  }`,
+  `.bdd-scenario-text {
+    font-size:1.2rem;
+    margin-left:5px;
+  }`,
+  `.bdd-code {
+    font-family: 'Rboto Mono', monospace;
+    background-color:#f4f4f4;
+    font-size:0.9rem;
+  }`,
+  `.bdd-row {
+    display:flex;
+    margin-top:5px;
+  }`,
+  `.bdd-given-label, .bdd-and-label, .bdd-when-label, .bdd-then-label {
+    font-weight:bold;
+    text-align:right;
+    width:89px;
+    min-width:89px;
+    margin-right: 5px;
+  }`,
+  `.bdd-given-label { color: #268383; }`,
+  `.bdd-and-label { color: #9CCC3C; }`,
+  `.bdd-when-label { color: #DB8640; }`,
+  `.bdd-then-label { color: #DB4040; }`,
+  `.bdd-given-text, .bdd-and-text, .bdd-when-text, .bdd-then-text {
+    color: #333;
   }`,
 ];

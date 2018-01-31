@@ -30,7 +30,7 @@
     "label-position": true,
     "max-line-length": [
       true,
-      140
+      14040
     ],
     "member-access": false,
     "member-ordering": [
@@ -127,6 +127,7 @@
       true,
       "element",
       "app",
+      "bdd",
       "kebab-case"
     ],
     "no-output-on-prefix": true,
