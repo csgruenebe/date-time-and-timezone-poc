@@ -177,6 +177,9 @@ export class AppComponent implements OnInit {
   validUtcDateResult: string; // OUPUT!
 
   ngOnInit() {
+    this.form.get('selectedTimeZone').valueChanges.subscribe(() => {
+      this.validUtcDateResult = null;
+    });
     this.form.get('utcDate').valueChanges.subscribe(change => {
       const tempDate = change + '+0000';
       if (UtcHelper.isValidJavaUTCDate(tempDate)) {
@@ -206,7 +209,6 @@ export class AppComponent implements OnInit {
   }
 
   processDateTimeChange(date: string) {
-    console.log('FOO', date);
     if (UtcHelper.isValidJavaUTCDate(date)) {
       this.validUtcDateResult = date;
     }
