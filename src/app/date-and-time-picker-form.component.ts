@@ -52,11 +52,16 @@ import { sharedStyles } from './app.styles';
         <div class="utcOffset">
           UTC Offset: {{getUtcOffset()}}
         </div>
+        <div class="dst">
+          Is <a href="https://momentjs.com/docs/#/query/is-daylight-saving-time/" target="_blank">DST:</a>
+          {{getIsDST() ? 'YES' : 'NO'}} <a class="bug" href="https://github.com/moment/moment-timezone/issues/562">(HAS BUG#562)</a>
+        </div>
       </div>
     </app-mac>
 `,
   styles: [
     `.img { width:100%; }`,
+    `.bug { color: #C60000;}`,
     `.result { margin-top:20px; }`,
     `.timePickerField { min-width:55px; margin-right:5px; }`,
     `.utcOffset { margin-top:30px; }`,
@@ -204,6 +209,10 @@ export class DateAndTimePickerFormComponent implements OnInit, OnChanges {
 
   getUtcOffset() {
     return this.validTimezoneAwareMoment.format('ZZ');
+  }
+
+  getIsDST() {
+    return moment(this.validTimezoneAwareMoment).tz(this.timezone).isDST();
   }
 
 }
