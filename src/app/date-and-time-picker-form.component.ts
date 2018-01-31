@@ -1,15 +1,17 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import { IMyDateModel, IMyDpOptions } from 'mydatepicker';
 import UtcHelper from './utc-helper';
 import * as moment from 'moment-timezone';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Moment } from 'moment';
 import { isString } from 'util';
+import { sharedStyles } from './app.styles';
 
 @Component({
   selector: 'app-date-and-time-picker-form',
+  encapsulation: ViewEncapsulation.None,
   template: `
-    <app-mac type="de">
+    <app-mac [type]="timezone">
       <div *ngIf="!errors.utcInputInvalid">
         <div
           *ngIf="datePicker?.formGroup"
@@ -17,6 +19,7 @@ import { isString } from 'util';
           style="width:150px;"
         >
           <my-date-picker
+            selectorWidth="100px"
             [options]="datePicker.options"
             formControlName="date"
           ></my-date-picker>
@@ -24,21 +27,21 @@ import { isString } from 'util';
         <div
           *ngIf="timePicker?.formGroup?.value.hour"
           [formGroup]="timePicker.formGroup"
-          style="width:150px; display:flex;"
+          style="width:150px; margin-top:20px; display:flex; align-items: center;"
         >
-          <select formControlName="hour">
+          <select formControlName="hour" class="sharedSelect timePickerField">
             <option
               [value]="prefixWithZero(hour)"
               *ngFor="let hour of timePicker.hours"
             >{{prefixWithZero(hour)}}</option>
           </select>
-          <select formControlName="minute">
+          <select formControlName="minute" class="sharedSelect timePickerField">
             <option
               [value]="prefixWithZero(minute)"
               *ngFor="let minute of timePicker.minutes"
             >{{prefixWithZero(minute)}}</option>
           </select>
-          <select formControlName="second">
+          <select formControlName="second" class="sharedSelect timePickerField">
             <option
               [value]="prefixWithZero(second)"
               *ngFor="let second of timePicker.seconds"
@@ -46,9 +49,8 @@ import { isString } from 'util';
           </select>
           <span>&nbsp;(HH:mm:ss)</span>
         </div>
-        <div class="result">
-          <strong>UTC Result for DB</strong><br>
-          <span class="utcResult">{{utcResult}}</span>
+        <div class="utcOffset">
+          UTC Offset: {{getUtcOffset()}}
         </div>
       </div>
     </app-mac>
@@ -56,8 +58,9 @@ import { isString } from 'util';
   styles: [
     `.img { width:100%; }`,
     `.result { margin-top:20px; }`,
-    `.utcResult { font-family: 'Roboto Mono', monospace; }`,
-  ]
+    `.timePickerField { min-width:55px; margin-right:5px; }`,
+    `.utcOffset { margin-top:30px; }`,
+  ].concat(sharedStyles)
 })
 export class DateAndTimePickerFormComponent implements OnInit, OnChanges {
   validTimezoneAwareMoment: Moment = null;
@@ -71,6 +74,7 @@ export class DateAndTimePickerFormComponent implements OnInit, OnChanges {
       editableDateField: false,
       showClearDateBtn: false,
       openSelectorOnInputClick: true,
+      showInputField: true,
     },
     formGroup: new FormGroup({
       date: new FormControl(null)
@@ -180,6 +184,10 @@ export class DateAndTimePickerFormComponent implements OnInit, OnChanges {
     if (this.utcDate !== this.utcResult) {
       this.changed.emit(this.utcResult);
     }
+  }
+
+  getUtcOffset() {
+    return this.validTimezoneAwareMoment.format('ZZ');
   }
 
 }

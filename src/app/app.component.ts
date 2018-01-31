@@ -3,6 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import * as moment from 'moment-timezone';
 import UtcHelper from './utc-helper';
 import { isNullOrUndefined } from 'util';
+import { sharedStyles } from './app.styles';
 
 @Component({
   selector: 'app-root',
@@ -20,12 +21,61 @@ import { isNullOrUndefined } from 'util';
       </div>
     </div>
 
-    Used Frameworks
-    - <a href="https://momentjs.com/">Moment</a>
-    - <a href="https://momentjs.com/timezone/">Moment Timezone</a>
-    - <a href="https://github.com/kekeh/mydatepicker">kekeh/mydatepicker</a>
+    <div class="row mt-m">
+      <div class="col">
+        <div>
+          <h3>1. Set UTC DateTime in Database</h3>
+          <app-mac type="Database">
+            <form [formGroup]="form" class="form">
+              <div class="fieldlabel">UTC</div>
+              <input
+                class="sharedField"
+                [class.sharedFieldHasError]="errorUtcDate"
+                style="width:195px" type="text" formControlName="utcDate" />
+              <div class="fieldafter">
+                +0000
+              </div>
+            </form>
+            <div class="errorUtcDate" *ngIf="errorUtcDate">
+              Not a valid UTC Date in form of <br>2018-08-20T12:00:00.000+0000
+            </div>
+          </app-mac>
+        </div>
+      </div>
+      <div class="col">
+        <div [formGroup]="form">
+          <h3>2. Select TimeZone</h3>
+          <select
+            formControlName="selectedTimeZone"
+            class="sharedSelect timeZoneSelect">
+            <option
+              [value]="availableTimeZone.tz"
+              *ngFor="let availableTimeZone of availableTimeZonesAndDateFormats"
+            >{{availableTimeZone.tz}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="col">
+        <div>
+          <h3>3. Use DatePicker</h3>
+          <app-date-and-time-picker-form
+            *ngIf="form?.value?.selectedTimeZone"
+            [utcDate]="validUtcDate"
+            [timezone]="form.value.selectedTimeZone"
+            (changed)="processDateTimeChange($event)"
+          ></app-date-and-time-picker-form>
+        </div>
+      </div>
+      <div class="col">
+        <div>
+          <h3>4. Utc Result for DB</h3>
+          <div class="utcResult">{{validUtcDateResult ? validUtcDateResult : '...' }}</div>
+        </div>
+      </div>
+    </div>
 
-    <h2>Daylight Saving Time</h2>
+
+    <h2 class="mt-xl">Daylight Saving Time</h2>
 
     <p>On 25-03-2018 at 02:00 a.m time changes to SummerTime in Europe/Berlin/CET meaning the Clock is set to 03:00 a.m.</p>
     <p>
@@ -34,66 +84,14 @@ import { isNullOrUndefined } from 'util';
       to <a target="_blank" href="https://www.timeanddate.com/time/zones/cest">CEST</a> (UTC+0200).
     </p>
 
-    <h2 class="mt-m">Datetime Picker</h2>
-
-    <p>
-      In the Database we store our date in UTC format. But since Java has trouble with the last <code>:</code>
-      in the UTC offset our format looks like so.
-    </p>
-
-    <form [formGroup]="form" class="form">
-      <div class="fieldlabel">UTC Source Date:</div>
-      <input
-        class="field"
-        [class.fieldError]="errorUtcDate"
-        style="width:195px" type="text" formControlName="utcDate" />
-      <div class="fieldafter">
-        +0000
-      </div>
-      <div class="errorUtcDate" *ngIf="errorUtcDate">
-        Not a valid UTC Date in form of <br>2018-08-20T12:00:00.000+0000
-      </div>
-    </form>
-
-    <p>
-      Now we can change the UTC Date in our Angular Component which is set to Timezone
-      <strong>Europe/Berlin</strong> with current <strong>UTC Offset of {{getTimeZoneOffset('Europe/Berlin')}}</strong>:
-    </p>
-
-    <div class="row mt-m">
-      <div class="col">
-        <app-date-and-time-picker-form
-          [utcDate]="validUtcDate"
-          [timezone]="'Europe/Berlin'"
-          (changed)="processDateTimeChange($event)"
-        ></app-date-and-time-picker-form>
-      </div>
+    <div style="margin-top:200px;">
+      Used Frameworks
+      - <a href="https://momentjs.com/">Moment</a>
+      - <a href="https://momentjs.com/timezone/">Moment Timezone</a>
+      - <a href="https://github.com/kekeh/mydatepicker">kekeh/mydatepicker</a>
     </div>
 
-    <h2 class="mt-m">Date Displayed for other Time Zones</h2>
-    <div class="row mt-m">
-      <div class="col">
-        <app-mac type="de">
-          <span class="label">Timezone:</span> Europe/Berlin<br>
-          <span class="label">Datetime:</span> {{getTimeInTimeZoneWithFormat('Europe/Berlin', 'DD. MMM. YYYY, HH:mm')}}<br>
-          <span class="label">UTC Offset:</span> {{getTimeZoneOffset('Europe/Berlin')}}
-        </app-mac>
-      </div>
-      <div class="col">
-        <app-mac type="uk">
-          <span class="label">Timezone:</span> Europe/London<br>
-          <span class="label">Datetime:</span> {{getTimeInTimeZoneWithFormat('Europe/London', 'DD MMM YYYY, HH:mm')}}<br>
-          <span class="label">UTC Offset:</span> {{getTimeZoneOffset('Europe/London')}}
-        </app-mac>
-      </div>
-      <div class="col">
-        <app-mac type="us">
-          <span class="label">Timezone:</span> America/New_York<br>
-          <span class="label">Datetime:</span> {{getTimeInTimeZoneWithFormat('America/New_York', 'MMM DD, YYYY, hh:mm a')}}<br>
-          <span class="label">UTC Offset:</span> {{getTimeZoneOffset('America/New_York')}}
-        </app-mac>
-      </div>
-    </div>
+
   </div>
   `,
   styles: [
@@ -106,54 +104,57 @@ import { isNullOrUndefined } from 'util';
       margin:0;
     }`,
     `.container {
-      max-width:1300px;
+      max-width:1600px;
       margin: 0 auto;
       padding:20px;
     }`,
     `.form {
       display:flex;
+      margin-top:6px;
       align-items: center;
     }`,
     `.fieldlabel {
       font-weight: 500;
-      width:140px;
-    }`,
-    `.field {
-      outline:0;
-      background-color:#fafafa;
-      border:0;
-      padding:5px;
-      border-bottom:2px solid #407F7F;
-      font-family: 'Roboto Mono', monospace;
-      font-size:14px;
-    }`,
-    `.fieldError {
-      border-bottom:2px solid #C60000;
+      width:40px;
     }`,
     `.fieldafter {
       font-family: 'Roboto Mono', monospace;
       font-size:14px;
     }`,
+    `.timeZoneSelect {
+      max-width:180px;
+      margin-top:40px;
+    }`,
     `.errorUtcDate {
       background-color:#C60000;
       color:#fff;
       padding:4px;
-      margin-left:10px;
+      margin-top:5px;
     }`,
+    `.utcResult { font-family: 'Roboto Mono', monospace; min-width:300px; margin-top:60px;}`,
     `.mt-m { margin-top:30px; }`,
+    `.mt-xl { margin-top:100px; }`,
     `.label { width:90px; display:inline-block; }`,
     '.row { display:flex; flex-direction: row; flex-wrap: wrap; }',
-    '.col { flex:1; display: flex; flex-direction: row; justify-content: center; align-items: center; }',
-  ]
+    '.col { flex:1; display: flex; flex-direction: row; justify-content: center; align-items: flex-start; }',
+  ].concat(sharedStyles)
 })
 export class AppComponent implements OnInit {
-  title = 'app';
-
+  availableTimeZonesAndDateFormats: TimeZoneAndDateFormat[] = [
+    { tz: 'Europe/Berlin', formatDateAndTime: 'DD. MMM. YYYY, HH:mm' },
+    { tz: 'Europe/London', formatDateAndTime: 'DD MMM YYYY, HH:mm' },
+    { tz: 'America/New_York', formatDateAndTime: 'MMM DD, YYYY, hh:mm a' },
+    { tz: 'Japan', formatDateAndTime: 'MMM DD, YYYY, hh:mm a' },
+    { tz: 'Asia/Singapore', formatDateAndTime: 'MMM DD, YYYY, hh:mm a' },
+    { tz: 'Asia/Hong_Kong', formatDateAndTime: 'MMM DD, YYYY, hh:mm a' },
+  ];
   form = new FormGroup({
-    utcDate: new FormControl('2018-08-20T12:00:00.000')
+    utcDate: new FormControl('2018-08-20T12:00:00.000'),
+    selectedTimeZone: new FormControl(null),
   });
   errorUtcDate = false;
-  validUtcDate: string;
+  validUtcDate: string; // INPUT!
+  validUtcDateResult: string; // OUPUT!
 
   ngOnInit() {
     this.form.get('utcDate').valueChanges.subscribe(change => {
@@ -185,7 +186,13 @@ export class AppComponent implements OnInit {
 
   processDateTimeChange(date: string) {
     if (UtcHelper.isValidJavaUTCDate(date)) {
-      this.form.get('utcDate').setValue(date.substr(0, date.length - 5));
+      this.validUtcDateResult = date;
     }
   }
+}
+
+
+export class TimeZoneAndDateFormat {
+  tz: string;
+  formatDateAndTime: string;
 }
