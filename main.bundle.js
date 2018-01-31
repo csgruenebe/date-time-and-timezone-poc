@@ -482,6 +482,8 @@ var BddWhenComponent = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_util__ = __webpack_require__("../../../../util/util.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_util___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_util__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_styles__ = __webpack_require__("../../../../../src/app/app.styles.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs_Subject__ = __webpack_require__("../../../../rxjs/_esm5/Subject.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_add_operator_takeUntil__ = __webpack_require__("../../../../rxjs/_esm5/add/operator/takeUntil.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -497,9 +499,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
+
 var DateAndTimePickerFormComponent = /** @class */ (function () {
     function DateAndTimePickerFormComponent() {
         this.validTimezoneAwareMoment = null;
+        this.preDestroy = new __WEBPACK_IMPORTED_MODULE_6_rxjs_Subject__["a" /* Subject */]();
         this.errors = {
             utcInputInvalid: false
         };
@@ -510,10 +515,7 @@ var DateAndTimePickerFormComponent = /** @class */ (function () {
                 showClearDateBtn: false,
                 openSelectorOnInputClick: true,
                 showInputField: true,
-            },
-            formGroup: new __WEBPACK_IMPORTED_MODULE_3__angular_forms__["b" /* FormGroup */]({
-                date: new __WEBPACK_IMPORTED_MODULE_3__angular_forms__["a" /* FormControl */](null)
-            }),
+            }
         };
         this.timePicker = {
             hours: Array.from(new Array(24), function (val, index) { return index; }),
@@ -521,12 +523,7 @@ var DateAndTimePickerFormComponent = /** @class */ (function () {
             seconds: Array.from(new Array(60), function (val, index) { return index; }),
             options: {
                 dateFormat: 'HH:mm:ss'
-            },
-            formGroup: new __WEBPACK_IMPORTED_MODULE_3__angular_forms__["b" /* FormGroup */]({
-                hour: new __WEBPACK_IMPORTED_MODULE_3__angular_forms__["a" /* FormControl */](null),
-                minute: new __WEBPACK_IMPORTED_MODULE_3__angular_forms__["a" /* FormControl */](null),
-                second: new __WEBPACK_IMPORTED_MODULE_3__angular_forms__["a" /* FormControl */](null),
-            }),
+            }
         };
         this.changed = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["t" /* EventEmitter */](); // e.g. '2018-08-20T12:00:00.000+0000'
     }
@@ -535,47 +532,48 @@ var DateAndTimePickerFormComponent = /** @class */ (function () {
     //
     DateAndTimePickerFormComponent.prototype.ngOnInit = function () {
         this.initDateAndTimePicker();
-        this.initChangeListener();
     };
     DateAndTimePickerFormComponent.prototype.ngOnChanges = function () {
+        this.preDestroy.next(true);
         this.initDateAndTimePicker();
     };
+    DateAndTimePickerFormComponent.prototype.ngOnDestroy = function () {
+        this.preDestroy.next(true);
+    };
     DateAndTimePickerFormComponent.prototype.initDateAndTimePicker = function () {
+        console.log('initDateAndTimePicker');
         var self = this;
         if (__WEBPACK_IMPORTED_MODULE_1__utc_helper__["a" /* default */].isValidJavaUTCDate(this.utcDate)) {
             this.validTimezoneAwareMoment = null;
             this.validTimezoneAwareMoment = __WEBPACK_IMPORTED_MODULE_2_moment_timezone__(this.utcDate).tz(this.timezone);
-            self.initDatePicker();
-            self.initTimePicker(this.validTimezoneAwareMoment.hour(), this.validTimezoneAwareMoment.minute(), this.validTimezoneAwareMoment.second());
+            console.log('initDateAndTimePicker datetime:', this.validTimezoneAwareMoment.format());
+            self.initDateTimePicker();
             this.errors.utcInputInvalid = false;
         }
         else {
             this.errors.utcInputInvalid = true;
         }
     };
-    DateAndTimePickerFormComponent.prototype.initDatePicker = function () {
+    DateAndTimePickerFormComponent.prototype.getFormattedElement = function (format) {
+        return this.validTimezoneAwareMoment.format(format);
+    };
+    DateAndTimePickerFormComponent.prototype.initDateTimePicker = function () {
+        var _this = this;
         var datePickerModel = {
             date: {
-                year: this.validTimezoneAwareMoment.year(),
-                month: this.validTimezoneAwareMoment.format('M'),
-                day: this.validTimezoneAwareMoment.format('D'),
+                year: this.getFormattedElement('YYYY'),
+                month: this.getFormattedElement('M'),
+                day: this.getFormattedElement('D'),
             }
         };
-        this.datePicker.formGroup.get('date').setValue(datePickerModel);
-    };
-    DateAndTimePickerFormComponent.prototype.initTimePicker = function (hour, minute, second) {
-        this.timePicker.formGroup.get('hour').setValue(this.prefixWithZero(hour));
-        this.timePicker.formGroup.get('minute').setValue(this.prefixWithZero(minute));
-        this.timePicker.formGroup.get('second').setValue(this.prefixWithZero(second));
-    };
-    DateAndTimePickerFormComponent.prototype.initChangeListener = function () {
-        var _this = this;
-        this.datePicker.formGroup.get('date').valueChanges.subscribe(function (changes) {
-            _this.utcResult = _this.updateInternalMomentAndReturnUtcDate(_this.timePicker.formGroup.value, changes, true);
-            _this.emitChange();
+        this.form = new __WEBPACK_IMPORTED_MODULE_3__angular_forms__["b" /* FormGroup */]({
+            date: new __WEBPACK_IMPORTED_MODULE_3__angular_forms__["a" /* FormControl */](datePickerModel),
+            hour: new __WEBPACK_IMPORTED_MODULE_3__angular_forms__["a" /* FormControl */](this.getFormattedElement('HH')),
+            minute: new __WEBPACK_IMPORTED_MODULE_3__angular_forms__["a" /* FormControl */](this.getFormattedElement('mm')),
+            second: new __WEBPACK_IMPORTED_MODULE_3__angular_forms__["a" /* FormControl */](this.getFormattedElement('ss')),
         });
-        this.timePicker.formGroup.valueChanges.subscribe(function (changes) {
-            _this.utcResult = _this.updateInternalMomentAndReturnUtcDate(changes, _this.datePicker.formGroup.value.date, false);
+        this.form.valueChanges.takeUntil(this.preDestroy).subscribe(function (changes) {
+            _this.utcResult = _this.updateInternalMomentAndReturnUtcDate(changes);
             _this.emitChange();
         });
     };
@@ -589,35 +587,28 @@ var DateAndTimePickerFormComponent = /** @class */ (function () {
         }
         return temp < 10 ? "0" + temp : "" + temp;
     };
-    DateAndTimePickerFormComponent.prototype.updateInternalMomentAndReturnUtcDate = function (time, date, updateDate) {
+    DateAndTimePickerFormComponent.prototype.updateInternalMomentAndReturnUtcDate = function (change) {
         //
-        // UPDATE DATE (XOR UPDATE EITHER DATE OR TIME TO AVOID LOOPS)
+        // UPDATE DATE AND TIME
         //
-        if (updateDate === true) {
-            this.validTimezoneAwareMoment.year(parseInt(date.date.year, 10));
-            this.validTimezoneAwareMoment.month(parseInt(date.date.month, 10));
-            this.validTimezoneAwareMoment.day(parseInt(date.date.day, 10));
-        }
-        //
-        // UPDATE TIME (XOR UPDATE EITHER DATE OR TIME TO AVOID LOOPS)
-        //
-        if (updateDate === false) {
-            this.validTimezoneAwareMoment.hour(parseInt(time.hour, 10));
-            this.validTimezoneAwareMoment.minute(parseInt(time.minute, 10));
-            this.validTimezoneAwareMoment.second(parseInt(time.second, 10));
-        }
+        this.validTimezoneAwareMoment = __WEBPACK_IMPORTED_MODULE_2_moment_timezone__(this.validTimezoneAwareMoment
+            .year(parseInt(change.date.date.year, 10))
+            .month(parseInt(change.date.date.month, 10) - 1) // http://momentjs.com/docs/#/get-set/month/ !!!!
+            .date(parseInt(change.date.date.day, 10))
+            .hour(parseInt(change.hour, 10))
+            .minute(parseInt(change.minute, 10))
+            .second(parseInt(change.second, 10))).tz(this.timezone);
+        console.log('updated internal datetime:', this.validTimezoneAwareMoment.format());
         //
         // BUILD NEW UTC DATE
         //
-        var tz = this.validTimezoneAwareMoment.format('ZZ');
-        var dateStringInCurrentTimeZone = date.date.year + "-" + this.prefixWithZero(date.date.month) + "-" + this.prefixWithZero(date.date.day) + "T" + time.hour + ":" + time.minute + ":" + time.second + ".000" + tz;
-        return __WEBPACK_IMPORTED_MODULE_2_moment_timezone__(dateStringInCurrentTimeZone).utc().format(__WEBPACK_IMPORTED_MODULE_1__utc_helper__["a" /* default */].MOMENT_UTC_FORMAT);
+        return __WEBPACK_IMPORTED_MODULE_2_moment_timezone__(this.validTimezoneAwareMoment).tz(this.timezone).utc().format(__WEBPACK_IMPORTED_MODULE_1__utc_helper__["a" /* default */].MOMENT_UTC_FORMAT);
     };
     DateAndTimePickerFormComponent.prototype.emitChange = function () {
         this.changed.emit(this.utcResult);
     };
     DateAndTimePickerFormComponent.prototype.getUtcOffset = function () {
-        return this.validTimezoneAwareMoment.format('ZZ');
+        return __WEBPACK_IMPORTED_MODULE_2_moment_timezone__(this.validTimezoneAwareMoment).tz(this.timezone).format('ZZ');
     };
     DateAndTimePickerFormComponent.prototype.getIsDST = function () {
         return __WEBPACK_IMPORTED_MODULE_2_moment_timezone__(this.validTimezoneAwareMoment).tz(this.timezone).isDST();
@@ -638,11 +629,12 @@ var DateAndTimePickerFormComponent = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
             selector: 'app-date-and-time-picker-form',
             encapsulation: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_5" /* ViewEncapsulation */].None,
-            template: "\n    <app-mac [type]=\"timezone\" *ngIf=\"validTimezoneAwareMoment\">\n      <div *ngIf=\"!errors.utcInputInvalid\">\n        <div\n          *ngIf=\"datePicker?.formGroup\"\n          [formGroup]=\"datePicker.formGroup\"\n          style=\"width:150px;\"\n        >\n          <my-date-picker\n            selectorWidth=\"100px\"\n            [options]=\"datePicker.options\"\n            formControlName=\"date\"\n          ></my-date-picker>\n        </div>\n        <div\n          *ngIf=\"timePicker?.formGroup?.value.hour\"\n          [formGroup]=\"timePicker.formGroup\"\n          style=\"width:150px; margin-top:20px; display:flex; align-items: center;\"\n        >\n          <select formControlName=\"hour\" class=\"sharedSelect timePickerField\">\n            <option\n              [value]=\"prefixWithZero(hour)\"\n              *ngFor=\"let hour of timePicker.hours\"\n            >{{prefixWithZero(hour)}}</option>\n          </select>\n          <select formControlName=\"minute\" class=\"sharedSelect timePickerField\">\n            <option\n              [value]=\"prefixWithZero(minute)\"\n              *ngFor=\"let minute of timePicker.minutes\"\n            >{{prefixWithZero(minute)}}</option>\n          </select>\n          <select formControlName=\"second\" class=\"sharedSelect timePickerField\">\n            <option\n              [value]=\"prefixWithZero(second)\"\n              *ngFor=\"let second of timePicker.seconds\"\n            >{{prefixWithZero(second)}}</option>\n          </select>\n          <span>&nbsp;(HH:mm:ss)</span>\n        </div>\n        <div class=\"utcOffset\">\n          UTC Offset: {{getUtcOffset()}}\n        </div>\n        <div class=\"dst\">\n          Is <a href=\"https://momentjs.com/docs/#/query/is-daylight-saving-time/\" target=\"_blank\">DST:</a>\n          {{getIsDST() ? 'YES' : 'NO'}} <a class=\"bug\" href=\"https://github.com/moment/moment-timezone/issues/562\">(HAS BUG#562)</a>\n        </div>\n      </div>\n    </app-mac>\n",
+            template: "\n    <app-mac [type]=\"timezone\" *ngIf=\"validTimezoneAwareMoment\">\n      <div *ngIf=\"!errors.utcInputInvalid\">\n        <div\n          *ngIf=\"form\"\n          [formGroup]=\"form\"\n          style=\"width:150px;\"\n        >\n          <my-date-picker\n            selectorWidth=\"100px\"\n            [options]=\"datePicker.options\"\n            formControlName=\"date\"\n          ></my-date-picker>\n        </div>\n        <div\n          *ngIf=\"form?.value.hour\"\n          [formGroup]=\"form\"\n          style=\"width:150px; margin-top:20px; display:flex; align-items: center;\"\n        >\n          <select formControlName=\"hour\" class=\"sharedSelect timePickerField\">\n            <option\n              [value]=\"prefixWithZero(hour)\"\n              *ngFor=\"let hour of timePicker.hours\"\n            >{{prefixWithZero(hour)}}</option>\n          </select>\n          <select formControlName=\"minute\" class=\"sharedSelect timePickerField\">\n            <option\n              [value]=\"prefixWithZero(minute)\"\n              *ngFor=\"let minute of timePicker.minutes\"\n            >{{prefixWithZero(minute)}}</option>\n          </select>\n          <select formControlName=\"second\" class=\"sharedSelect timePickerField\">\n            <option\n              [value]=\"prefixWithZero(second)\"\n              *ngFor=\"let second of timePicker.seconds\"\n            >{{prefixWithZero(second)}}</option>\n          </select>\n          <span>&nbsp;(HH:mm:ss)</span>\n        </div>\n        <div class=\"utcOffset\">\n          UTC Offset: {{getUtcOffset()}}\n        </div>\n        <div class=\"dst\">\n          Is <a href=\"https://momentjs.com/docs/#/query/is-daylight-saving-time/\" target=\"_blank\">DST:</a>\n          {{getIsDST() ? 'YES' : 'NO'}}\n        </div>\n      </div>\n    </app-mac>\n",
             styles: [
                 ".img { width:100%; }",
                 ".bug { color: #C60000;}",
                 ".result { margin-top:20px; }",
+                ".dst { margin-top:10px; }",
                 ".timePickerField { min-width:55px; margin-right:5px; }",
                 ".utcOffset { margin-top:30px; }",
             ].concat(__WEBPACK_IMPORTED_MODULE_5__app_styles__["a" /* sharedStyles */])
@@ -656,15 +648,10 @@ var DatePickerSettings = /** @class */ (function () {
     }
     return DatePickerSettings;
 }());
-var FormTime = /** @class */ (function () {
-    function FormTime() {
+var DateTimeFormChange = /** @class */ (function () {
+    function DateTimeFormChange() {
     }
-    return FormTime;
-}());
-var FormDate = /** @class */ (function () {
-    function FormDate() {
-    }
-    return FormDate;
+    return DateTimeFormChange;
 }());
 
 
