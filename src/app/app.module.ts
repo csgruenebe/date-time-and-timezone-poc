@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { MyDatePickerModule } from 'mydatepicker';
 import { AppComponent } from './app.component';
-import { MacComponent } from './mac.component';
+import { PcComponent } from './pc.component';
 import { UtcDateFlowDiagramComponent } from './utc-date-flow-diagram.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -18,7 +18,7 @@ import { BddCodeComponent } from './bdd/bdd-code.component';
 @NgModule({
   declarations: [
     AppComponent,
-    MacComponent,
+    PcComponent,
     UtcDateFlowDiagramComponent,
     DateAndTimePickerFormComponent,
     BddScenarioComponent,

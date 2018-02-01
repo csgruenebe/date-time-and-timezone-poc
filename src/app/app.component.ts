@@ -25,7 +25,7 @@ import { sharedStyles } from './app.styles';
       <div class="col">
         <div>
           <h3>1. Set UTC DateTime in Database</h3>
-          <app-mac type="Database">
+          <app-pc type="Database">
             <form [formGroup]="form" class="form">
               <div class="fieldlabel">UTC</div>
               <input
@@ -39,7 +39,7 @@ import { sharedStyles } from './app.styles';
             <div class="errorUtcDate" *ngIf="errorUtcDate">
               Not a valid UTC Date in form of <br>2018-08-20T12:00:00.000+0000
             </div>
-          </app-mac>
+          </app-pc>
         </div>
       </div>
       <div class="col">
@@ -77,7 +77,7 @@ import { sharedStyles } from './app.styles';
 
 
     <div class="mt-xl"></div>
-    <bdd-feature>DateTimePicker Component should be 'daylight savings time' aware</bdd-feature>
+    <bdd-feature>DateTimePicker Component should be TimeZone and 'daylight savings time' aware</bdd-feature>
     <ul class="bdd-notes">
       <li>For e.g. Europe/Berlin TimeZone on 25th March 2018 at 02:00 a.m the time changes to <a href="https://www.timeanddate.com/time/change/germany" target="_blank">SummerTime and the clock is set to 03:00 a.m.</a></li>
       <li>For e.g. Europe/Berlin TimeZone on 28th October 2018 at 03:00 a.m the time changes to <a href="https://www.timeanddate.com/time/change/germany" target="_blank">WinterTime and the clock is set to 02:00 a.m.</a></li>
@@ -85,11 +85,21 @@ import { sharedStyles } from './app.styles';
         At these times the timezone internally changes from <a target="_blank" href="https://www.timeanddate.com/time/zones/cet">CET</a> (UTC Offset +0100)
         to <a target="_blank" href="https://www.timeanddate.com/time/zones/cest">CEST</a> (UTC Offset +0200).
       </li>
+      <li>TimeZones are handled by using <a href="https://www.iana.org/time-zones">IANA TZ Databases</a> which are used by all major time libraries.</li>
       <li>The DateTimePicker Component consists of a DatePicker (Year, Month, Day) and a TimePicker (Hour, Minute, Second).</li>
-      <li>The DateTimePicker emits a UtcResultDate String on change.</li>
+      <li>The DateTimePicker accepts UTC DateStrings (Input).</li>
+      <li>The DateTimePicker emits an UtcResultDate String on change (Output).</li>
     </ul>
 
-    <bdd-scenario>TimePicker change triggers UTC Offset change (Winter to Summer)</bdd-scenario>
+    <bdd-scenario>DateTimePicker initializes with correct UTC Offset depending on TimeZone and Input Date</bdd-scenario>
+    <bdd-given>The Database Date is <bdd-code>2018-01-01T12:00:00.000+0000</bdd-code></bdd-given>
+    <bdd-and>The TimeZone is <bdd-code>Europe/Berlin</bdd-code></bdd-and>
+    <bdd-when>The DateTimePicker Component initializes</bdd-when>
+    <bdd-then>The DatePicker is set to <bdd-code>2018-01-01</bdd-code></bdd-then>
+    <bdd-and>The TimePicker is set to <bdd-code>13:00:00</bdd-code></bdd-and>
+    <bdd-and>The UTC Offset is calculated to <bdd-code>+0100</bdd-code></bdd-and>
+
+    <bdd-scenario>TimePicker change triggers UTC Offset change (no DST to DST)</bdd-scenario>
     <bdd-given>The Database Date is <bdd-code>2018-03-24T23:00:00.000+0000</bdd-code></bdd-given>
     <bdd-and>The TimeZone is <bdd-code>Europe/Berlin</bdd-code></bdd-and>
     <bdd-and>The DateTimePicker Component initialized to DatePicker <bdd-code>2018-03-25</bdd-code> and TimePicker <bdd-code>00:00:00</bdd-code> with UTC Offset <bdd-code>+0100</bdd-code></bdd-and>
@@ -97,12 +107,12 @@ import { sharedStyles } from './app.styles';
     <bdd-then>The UTC Offset changes to <bdd-code>+0200</bdd-code></bdd-then>
     <bdd-and>The UtcResultDate emitted is <bdd-code>2018-03-25T02:00:00.000+0000</bdd-code></bdd-and>
 
-    <bdd-scenario>TimePicker change triggers UTC Offset change (Summer to Winter)</bdd-scenario>
+    <bdd-scenario>TimePicker change triggers UTC Offset change (DST to no DST)</bdd-scenario>
 
 
-    <bdd-scenario>DatePicker change triggers UTC Offset change (Summer to Winter)</bdd-scenario>
+    <bdd-scenario>DatePicker change triggers UTC Offset change (no DST to DST)</bdd-scenario>
 
-    <bdd-scenario>DatePicker change triggers UTC Offset change (Winter to Summer)</bdd-scenario>
+    <bdd-scenario>DatePicker change triggers UTC Offset change (DST to no DST)</bdd-scenario>
 
 
     <div style="margin-top:200px;">

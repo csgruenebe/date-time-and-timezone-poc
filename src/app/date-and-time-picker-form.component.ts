@@ -13,7 +13,7 @@ import 'rxjs/add/operator/takeUntil';
   selector: 'app-date-and-time-picker-form',
   encapsulation: ViewEncapsulation.None,
   template: `
-    <app-mac [type]="timezone" *ngIf="validTimezoneAwareMoment">
+    <app-pc [type]="timezone" *ngIf="validTimezoneAwareMoment">
       <div *ngIf="!errors.utcInputInvalid">
         <div
           *ngIf="form"
@@ -59,15 +59,14 @@ import 'rxjs/add/operator/takeUntil';
           {{getIsDST() ? 'YES' : 'NO'}}
         </div>
       </div>
-    </app-mac>
+    </app-pc>
 `,
   styles: [
     `.img { width:100%; }`,
     `.bug { color: #C60000;}`,
-    `.result { margin-top:20px; }`,
-    `.dst { margin-top:10px; }`,
+    `.dst { margin-top:5px; margin-left:20px;}`,
     `.timePickerField { min-width:55px; margin-right:5px; }`,
-    `.utcOffset { margin-top:30px; }`,
+    `.utcOffset { margin-top:30px; margin-left:20px; }`,
   ].concat(sharedStyles)
 })
 export class DateAndTimePickerFormComponent implements OnInit, OnChanges, OnDestroy {
