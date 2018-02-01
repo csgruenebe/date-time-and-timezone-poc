@@ -97,7 +97,7 @@ var AppComponent = /** @class */ (function () {
     AppComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
             selector: 'app-root',
-            template: "\n  <div class=\"header\">\n    <div class=\"container\">\n      <h1 class=\"headline\">UTC DateTime and TimeZone Flow Proof of Concept</h1>\n    </div>\n  </div>\n  <div class=\"container\">\n\n    <div class=\"row\">\n      <div class=\"col\">\n        <app-utc-date-flow-diagram style=\"width:80%;\"></app-utc-date-flow-diagram>\n      </div>\n    </div>\n\n    <div class=\"row mt-m\">\n      <div class=\"col\">\n        <div>\n          <h3>1. Set UTC DateTime in Database</h3>\n          <app-mac type=\"Database\">\n            <form [formGroup]=\"form\" class=\"form\">\n              <div class=\"fieldlabel\">UTC</div>\n              <input\n                class=\"sharedField\"\n                [class.sharedFieldHasError]=\"errorUtcDate\"\n                style=\"width:195px\" type=\"text\" formControlName=\"utcDate\" />\n              <div class=\"fieldafter\">\n                +0000\n              </div>\n            </form>\n            <div class=\"errorUtcDate\" *ngIf=\"errorUtcDate\">\n              Not a valid UTC Date in form of <br>2018-08-20T12:00:00.000+0000\n            </div>\n          </app-mac>\n        </div>\n      </div>\n      <div class=\"col\">\n        <div [formGroup]=\"form\">\n          <h3>2. Select TimeZone</h3>\n          <select\n            formControlName=\"selectedTimeZone\"\n            class=\"sharedSelect timeZoneSelect\">\n            <option\n              [value]=\"availableTimeZone.tz\"\n              *ngFor=\"let availableTimeZone of availableTimeZonesAndDateFormats\"\n            >{{availableTimeZone.tz}}</option>\n          </select>\n        </div>\n      </div>\n      <div class=\"col\">\n        <div>\n          <h3>3. Use DatePicker</h3>\n          <app-date-and-time-picker-form\n            *ngIf=\"form?.value?.selectedTimeZone\"\n            [utcDate]=\"validUtcDate\"\n            [timezone]=\"form.value.selectedTimeZone\"\n            (changed)=\"processDateTimeChange($event)\"\n          ></app-date-and-time-picker-form>\n        </div>\n      </div>\n      <div class=\"col\">\n        <div>\n          <h3>4. Utc Result for DB</h3>\n          <div class=\"utcResult\">{{validUtcDateResult ? validUtcDateResult : '...' }}</div>\n        </div>\n      </div>\n    </div>\n\n\n\n    <div class=\"mt-xl\"></div>\n    <bdd-feature>DateTimePicker Component should be 'daylight savings time' aware</bdd-feature>\n    <ul class=\"bdd-notes\">\n      <li>For e.g. Europe/Berlin TimeZone on 25th March 2018 at 02:00 a.m the time changes to <a href=\"https://www.timeanddate.com/time/change/germany\" target=\"_blank\">SummerTime and the clock is set to 03:00 a.m.</a></li>\n      <li>For e.g. Europe/Berlin TimeZone on 28th October 2018 at 03:00 a.m the time changes to <a href=\"https://www.timeanddate.com/time/change/germany\" target=\"_blank\">WinterTime and the clock is set to 02:00 a.m.</a></li>\n      <li>\n        At these times the timezone internally changes from <a target=\"_blank\" href=\"https://www.timeanddate.com/time/zones/cet\">CET</a> (UTC Offset +0100)\n        to <a target=\"_blank\" href=\"https://www.timeanddate.com/time/zones/cest\">CEST</a> (UTC Offset +0200).\n      </li>\n      <li>The DateTimePicker Component consists of a DatePicker (Year, Month, Day) and a TimePicker (Hour, Minute, Second).</li>\n      <li>The DateTimePicker emits a UtcResultDate String on change.</li>\n    </ul>\n\n    <bdd-scenario>TimePicker change triggers UTC Offset change (Winter to Summer)</bdd-scenario>\n    <bdd-given>The Database Date is <bdd-code>2018-03-24T23:00:00.000+0000</bdd-code></bdd-given>\n    <bdd-and>The TimeZone is <bdd-code>Europe/Berlin</bdd-code></bdd-and>\n    <bdd-and>The DateTimePicker Component initialized to DatePicker <bdd-code>2018-03-25</bdd-code> and TimePicker <bdd-code>00:00:00</bdd-code> with UTC Offset <bdd-code>+0100</bdd-code></bdd-and>\n    <bdd-when>The User changes TimePicker to <bdd-code>04:00:00</bdd-code></bdd-when>\n    <bdd-then>The UTC Offset changes to <bdd-code>+0200</bdd-code></bdd-then>\n    <bdd-and>The UtcResultDate emitted is <bdd-code>2018-03-25T02:00:00.000+0000</bdd-code></bdd-and>\n\n    <bdd-scenario>TimePicker change triggers UTC Offset change (Summer to Winter)</bdd-scenario>\n\n\n    <bdd-scenario>DatePicker change triggers UTC Offset change (Summer to Winter)</bdd-scenario>\n\n    <bdd-scenario>DatePicker change triggers UTC Offset change (Winter to Summer)</bdd-scenario>\n\n\n    <div style=\"margin-top:200px;\">\n      Used Frameworks\n      - <a href=\"https://momentjs.com/\">Moment</a>\n      - <a href=\"https://momentjs.com/timezone/\">Moment Timezone</a>\n      - <a href=\"https://github.com/kekeh/mydatepicker\">kekeh/mydatepicker</a>\n    </div>\n  </div>\n  ",
+            template: "\n  <div class=\"header\">\n    <div class=\"container\">\n      <h1 class=\"headline\">UTC DateTime and TimeZone Flow Proof of Concept</h1>\n    </div>\n  </div>\n  <div class=\"container\">\n\n    <div class=\"row\">\n      <div class=\"col\">\n        <app-utc-date-flow-diagram style=\"width:80%;\"></app-utc-date-flow-diagram>\n      </div>\n    </div>\n\n    <div class=\"row mt-m\">\n      <div class=\"col\">\n        <div>\n          <h3>1. Set UTC DateTime in Database</h3>\n          <app-pc type=\"Database\">\n            <form [formGroup]=\"form\" class=\"form\">\n              <div class=\"fieldlabel\">UTC</div>\n              <input\n                class=\"sharedField\"\n                [class.sharedFieldHasError]=\"errorUtcDate\"\n                style=\"width:195px\" type=\"text\" formControlName=\"utcDate\" />\n              <div class=\"fieldafter\">\n                +0000\n              </div>\n            </form>\n            <div class=\"errorUtcDate\" *ngIf=\"errorUtcDate\">\n              Not a valid UTC Date in form of <br>2018-08-20T12:00:00.000+0000\n            </div>\n          </app-pc>\n        </div>\n      </div>\n      <div class=\"col\">\n        <div [formGroup]=\"form\">\n          <h3>2. Select TimeZone</h3>\n          <select\n            formControlName=\"selectedTimeZone\"\n            class=\"sharedSelect timeZoneSelect\">\n            <option\n              [value]=\"availableTimeZone.tz\"\n              *ngFor=\"let availableTimeZone of availableTimeZonesAndDateFormats\"\n            >{{availableTimeZone.tz}}</option>\n          </select>\n        </div>\n      </div>\n      <div class=\"col\">\n        <div>\n          <h3>3. Use DatePicker</h3>\n          <app-date-and-time-picker-form\n            *ngIf=\"form?.value?.selectedTimeZone\"\n            [utcDate]=\"validUtcDate\"\n            [timezone]=\"form.value.selectedTimeZone\"\n            (changed)=\"processDateTimeChange($event)\"\n          ></app-date-and-time-picker-form>\n        </div>\n      </div>\n      <div class=\"col\">\n        <div>\n          <h3>4. Utc Result for DB</h3>\n          <div class=\"utcResult\">{{validUtcDateResult ? validUtcDateResult : '...' }}</div>\n        </div>\n      </div>\n    </div>\n\n\n\n    <div class=\"mt-xl\"></div>\n    <bdd-feature>DateTimePicker Component should be TimeZone and 'daylight savings time' aware</bdd-feature>\n    <ul class=\"bdd-notes\">\n      <li>For e.g. Europe/Berlin TimeZone on 25th March 2018 at 02:00 a.m the time changes to <a href=\"https://www.timeanddate.com/time/change/germany\" target=\"_blank\">SummerTime and the clock is set to 03:00 a.m.</a></li>\n      <li>For e.g. Europe/Berlin TimeZone on 28th October 2018 at 03:00 a.m the time changes to <a href=\"https://www.timeanddate.com/time/change/germany\" target=\"_blank\">WinterTime and the clock is set to 02:00 a.m.</a></li>\n      <li>\n        At these times the timezone internally changes from <a target=\"_blank\" href=\"https://www.timeanddate.com/time/zones/cet\">CET</a> (UTC Offset +0100)\n        to <a target=\"_blank\" href=\"https://www.timeanddate.com/time/zones/cest\">CEST</a> (UTC Offset +0200).\n      </li>\n      <li>TimeZones are handled by using <a href=\"https://www.iana.org/time-zones\">IANA TZ Databases</a> which are used by all major time libraries.</li>\n      <li>The DateTimePicker Component consists of a DatePicker (Year, Month, Day) and a TimePicker (Hour, Minute, Second).</li>\n      <li>The DateTimePicker accepts UTC DateStrings (Input).</li>\n      <li>The DateTimePicker emits an UtcResultDate String on change (Output).</li>\n    </ul>\n\n    <bdd-scenario>DateTimePicker initializes with correct UTC Offset depending on TimeZone and Input Date</bdd-scenario>\n    <bdd-given>The Database Date is <bdd-code>2018-01-01T12:00:00.000+0000</bdd-code></bdd-given>\n    <bdd-and>The TimeZone is <bdd-code>Europe/Berlin</bdd-code></bdd-and>\n    <bdd-when>The DateTimePicker Component initializes</bdd-when>\n    <bdd-then>The DatePicker is set to <bdd-code>2018-01-01</bdd-code></bdd-then>\n    <bdd-and>The TimePicker is set to <bdd-code>13:00:00</bdd-code></bdd-and>\n    <bdd-and>The UTC Offset is calculated to <bdd-code>+0100</bdd-code></bdd-and>\n\n    <bdd-scenario>TimePicker change triggers UTC Offset change (no DST to DST)</bdd-scenario>\n    <bdd-given>The Database Date is <bdd-code>2018-03-24T23:00:00.000+0000</bdd-code></bdd-given>\n    <bdd-and>The TimeZone is <bdd-code>Europe/Berlin</bdd-code></bdd-and>\n    <bdd-and>The DateTimePicker Component initialized to DatePicker <bdd-code>2018-03-25</bdd-code> and TimePicker <bdd-code>00:00:00</bdd-code> with UTC Offset <bdd-code>+0100</bdd-code></bdd-and>\n    <bdd-when>The User changes TimePicker to <bdd-code>04:00:00</bdd-code></bdd-when>\n    <bdd-then>The UTC Offset changes to <bdd-code>+0200</bdd-code></bdd-then>\n    <bdd-and>The UtcResultDate emitted is <bdd-code>2018-03-25T02:00:00.000+0000</bdd-code></bdd-and>\n\n    <bdd-scenario>TimePicker change triggers UTC Offset change (DST to no DST)</bdd-scenario>\n\n\n    <bdd-scenario>DatePicker change triggers UTC Offset change (no DST to DST)</bdd-scenario>\n\n    <bdd-scenario>DatePicker change triggers UTC Offset change (DST to no DST)</bdd-scenario>\n\n\n    <div style=\"margin-top:200px;\">\n      Used Frameworks\n      - <a href=\"https://momentjs.com/\">Moment</a>\n      - <a href=\"https://momentjs.com/timezone/\">Moment Timezone</a>\n      - <a href=\"https://github.com/kekeh/mydatepicker\">kekeh/mydatepicker</a>\n    </div>\n  </div>\n  ",
             styles: [
                 ".header {\n      background-color:#268383;\n      padding:20px;\n    }",
                 ".headline {\n      color:#fff;\n      margin:0;\n      font-weight:300;\n    }",
@@ -138,7 +138,7 @@ var TimeZoneAndDateFormat = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_mydatepicker__ = __webpack_require__("../../../../mydatepicker/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_component__ = __webpack_require__("../../../../../src/app/app.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__mac_component__ = __webpack_require__("../../../../../src/app/mac.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pc_component__ = __webpack_require__("../../../../../src/app/pc.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utc_date_flow_diagram_component__ = __webpack_require__("../../../../../src/app/utc-date-flow-diagram.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__angular_forms__ = __webpack_require__("../../../forms/esm5/forms.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__angular_common__ = __webpack_require__("../../../common/esm5/common.js");
@@ -179,7 +179,7 @@ var AppModule = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["E" /* NgModule */])({
             declarations: [
                 __WEBPACK_IMPORTED_MODULE_3__app_component__["a" /* AppComponent */],
-                __WEBPACK_IMPORTED_MODULE_4__mac_component__["a" /* MacComponent */],
+                __WEBPACK_IMPORTED_MODULE_4__pc_component__["a" /* PcComponent */],
                 __WEBPACK_IMPORTED_MODULE_5__utc_date_flow_diagram_component__["a" /* UtcDateFlowDiagramComponent */],
                 __WEBPACK_IMPORTED_MODULE_8__date_and_time_picker_form_component__["a" /* DateAndTimePickerFormComponent */],
                 __WEBPACK_IMPORTED_MODULE_12__bdd_bdd_scenario_component__["a" /* BddScenarioComponent */],
@@ -629,14 +629,13 @@ var DateAndTimePickerFormComponent = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
             selector: 'app-date-and-time-picker-form',
             encapsulation: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_5" /* ViewEncapsulation */].None,
-            template: "\n    <app-mac [type]=\"timezone\" *ngIf=\"validTimezoneAwareMoment\">\n      <div *ngIf=\"!errors.utcInputInvalid\">\n        <div\n          *ngIf=\"form\"\n          [formGroup]=\"form\"\n          style=\"width:150px;\"\n        >\n          <my-date-picker\n            selectorWidth=\"100px\"\n            [options]=\"datePicker.options\"\n            formControlName=\"date\"\n          ></my-date-picker>\n        </div>\n        <div\n          *ngIf=\"form?.value.hour\"\n          [formGroup]=\"form\"\n          style=\"width:150px; margin-top:20px; display:flex; align-items: center;\"\n        >\n          <select formControlName=\"hour\" class=\"sharedSelect timePickerField\">\n            <option\n              [value]=\"prefixWithZero(hour)\"\n              *ngFor=\"let hour of timePicker.hours\"\n            >{{prefixWithZero(hour)}}</option>\n          </select>\n          <select formControlName=\"minute\" class=\"sharedSelect timePickerField\">\n            <option\n              [value]=\"prefixWithZero(minute)\"\n              *ngFor=\"let minute of timePicker.minutes\"\n            >{{prefixWithZero(minute)}}</option>\n          </select>\n          <select formControlName=\"second\" class=\"sharedSelect timePickerField\">\n            <option\n              [value]=\"prefixWithZero(second)\"\n              *ngFor=\"let second of timePicker.seconds\"\n            >{{prefixWithZero(second)}}</option>\n          </select>\n          <span>&nbsp;(HH:mm:ss)</span>\n        </div>\n        <div class=\"utcOffset\">\n          UTC Offset: {{getUtcOffset()}}\n        </div>\n        <div class=\"dst\">\n          Is <a href=\"https://momentjs.com/docs/#/query/is-daylight-saving-time/\" target=\"_blank\">DST:</a>\n          {{getIsDST() ? 'YES' : 'NO'}}\n        </div>\n      </div>\n    </app-mac>\n",
+            template: "\n    <app-pc [type]=\"timezone\" *ngIf=\"validTimezoneAwareMoment\">\n      <div *ngIf=\"!errors.utcInputInvalid\">\n        <div\n          *ngIf=\"form\"\n          [formGroup]=\"form\"\n          style=\"width:150px;\"\n        >\n          <my-date-picker\n            selectorWidth=\"100px\"\n            [options]=\"datePicker.options\"\n            formControlName=\"date\"\n          ></my-date-picker>\n        </div>\n        <div\n          *ngIf=\"form?.value.hour\"\n          [formGroup]=\"form\"\n          style=\"width:150px; margin-top:20px; display:flex; align-items: center;\"\n        >\n          <select formControlName=\"hour\" class=\"sharedSelect timePickerField\">\n            <option\n              [value]=\"prefixWithZero(hour)\"\n              *ngFor=\"let hour of timePicker.hours\"\n            >{{prefixWithZero(hour)}}</option>\n          </select>\n          <select formControlName=\"minute\" class=\"sharedSelect timePickerField\">\n            <option\n              [value]=\"prefixWithZero(minute)\"\n              *ngFor=\"let minute of timePicker.minutes\"\n            >{{prefixWithZero(minute)}}</option>\n          </select>\n          <select formControlName=\"second\" class=\"sharedSelect timePickerField\">\n            <option\n              [value]=\"prefixWithZero(second)\"\n              *ngFor=\"let second of timePicker.seconds\"\n            >{{prefixWithZero(second)}}</option>\n          </select>\n          <span>&nbsp;(HH:mm:ss)</span>\n        </div>\n        <div class=\"utcOffset\">\n          UTC Offset: {{getUtcOffset()}}\n        </div>\n        <div class=\"dst\">\n          Is <a href=\"https://momentjs.com/docs/#/query/is-daylight-saving-time/\" target=\"_blank\">DST:</a>\n          {{getIsDST() ? 'YES' : 'NO'}}\n        </div>\n      </div>\n    </app-pc>\n",
             styles: [
                 ".img { width:100%; }",
                 ".bug { color: #C60000;}",
-                ".result { margin-top:20px; }",
-                ".dst { margin-top:10px; }",
+                ".dst { margin-top:5px; margin-left:20px;}",
                 ".timePickerField { min-width:55px; margin-right:5px; }",
-                ".utcOffset { margin-top:30px; }",
+                ".utcOffset { margin-top:30px; margin-left:20px; }",
             ].concat(__WEBPACK_IMPORTED_MODULE_5__app_styles__["a" /* sharedStyles */])
         })
     ], DateAndTimePickerFormComponent);
@@ -657,11 +656,11 @@ var DateTimeFormChange = /** @class */ (function () {
 
 /***/ }),
 
-/***/ "../../../../../src/app/mac.component.ts":
+/***/ "../../../../../src/app/pc.component.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MacComponent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PcComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -673,53 +672,54 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
-var MacComponent = /** @class */ (function () {
-    function MacComponent() {
+var PcComponent = /** @class */ (function () {
+    function PcComponent() {
         this.style = {
             backgroundImage: '',
         };
     }
-    MacComponent.prototype.ngOnInit = function () {
+    PcComponent.prototype.ngOnInit = function () {
         if (this.type === 'Europe/Berlin') {
-            this.fileSuffix = 'de';
+            this.fileSuffix = 'germany';
         }
         if (this.type === 'Europe/London') {
-            this.fileSuffix = 'uk';
+            this.fileSuffix = 'united_kingdom';
         }
         if (this.type === 'America/New_York') {
-            this.fileSuffix = 'us';
+            this.fileSuffix = 'united_states';
         }
         if (this.type === 'Japan') {
-            this.fileSuffix = 'ja';
+            this.fileSuffix = 'japan';
         }
         if (this.type === 'Asia/Singapore') {
-            this.fileSuffix = 'si';
+            this.fileSuffix = 'singapore';
         }
         if (this.type === 'Asia/Hong_Kong') {
-            this.fileSuffix = 'ho';
+            this.fileSuffix = 'hong_kong';
         }
         if (this.type === 'Database') {
-            this.fileSuffix = 'db';
+            this.fileSuffix = 'database';
         }
-        this.style.backgroundImage = "url('./assets/mac-" + this.fileSuffix + ".jpg')";
+        this.style.backgroundImage = "url('./assets/flag_" + this.fileSuffix + ".svg')";
     };
-    MacComponent.prototype.ngOnChanges = function () {
+    PcComponent.prototype.ngOnChanges = function () {
         this.ngOnInit();
     };
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["z" /* Input */])(),
         __metadata("design:type", String)
-    ], MacComponent.prototype, "type", void 0);
-    MacComponent = __decorate([
+    ], PcComponent.prototype, "type", void 0);
+    PcComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'app-mac',
-            template: "\n    <div\n      class=\"mac\"\n      [ngStyle]=\"style\"\n    >\n      <ng-content></ng-content>\n    </div>\n  ",
+            selector: 'app-pc',
+            template: "\n    <div class=\"pc\">\n      <div class=\"pcInner\" [ngStyle]=\"style\">\n        <ng-content></ng-content>\n      </div>\n    </div>\n  ",
             styles: [
-                '.mac { background-size: 100% auto; padding:35px; width:300px; height:230px; background-repeat: no-repeat;}',
+                ".pc {\n      width:300px;\n      height:230px;\n      padding:35px;\n      background-size: 372px auto;\n      background-repeat: no-repeat;\n      background-image: url('./assets/pc.png');\n    }",
+                ".pcInner {\n      width:100%;\n      height: 100%;\n      background-position-x: 240px;\n      background-position-y: 130px;\n      background-size: 60px auto;\n      background-repeat: no-repeat;\n    }",
             ]
         })
-    ], MacComponent);
-    return MacComponent;
+    ], PcComponent);
+    return PcComponent;
 }());
 
 
