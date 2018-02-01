@@ -16,6 +16,10 @@ export const sharedStyles = [
   `.sharedFieldHasError{
     border-bottom:2px solid ${colors.error};
   }`,
+  `.sharedFieldMonospace {
+      font-family: 'Roboto Mono', monospace !important;
+      font-size:14px !important;
+  }`,
   `.sharedSelect {
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -81,7 +85,7 @@ export const sharedStyles = [
     color:#777;
   }`,
   `.bdd-scenario-label {
-    color: #7D1515;
+    color: #9CCC3C;
     font-weight:bold;
     font-size:1.2rem;
     margin-left:10px;
@@ -91,7 +95,7 @@ export const sharedStyles = [
     margin-left:5px;
   }`,
   `.bdd-code {
-    font-family: 'Rboto Mono', monospace;
+    font-family: 'Roboto Mono', monospace;
     background-color:#f4f4f4;
     font-size:0.9rem;
   }`,
@@ -107,7 +111,7 @@ export const sharedStyles = [
     margin-right: 5px;
   }`,
   `.bdd-given-label { color: #268383; }`,
-  `.bdd-and-label { color: #9CCC3C; }`,
+  `.bdd-and-label { color: #CCCCCC; }`,
   `.bdd-when-label { color: #DB8640; }`,
   `.bdd-then-label { color: #DB4040; }`,
   `.bdd-given-text, .bdd-and-text, .bdd-when-text, .bdd-then-text {

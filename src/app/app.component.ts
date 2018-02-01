@@ -29,7 +29,7 @@ import { sharedStyles } from './app.styles';
             <form [formGroup]="form" class="form">
               <div class="fieldlabel">UTC</div>
               <input
-                class="sharedField"
+                class="sharedField sharedFieldMonospace"
                 [class.sharedFieldHasError]="errorUtcDate"
                 style="width:195px" type="text" formControlName="utcDate" />
               <div class="fieldafter">

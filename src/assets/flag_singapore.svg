@@ -1,11 +1,24 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 4320 2880" width="500">
-<rect fill="#ed2939" width="4320" height="1440"/>
-<rect fill="#fff" y="1440" width="4320" height="1440"/>
-<path fill="#fff" d="M 1481.678,720 A 541.5,541.5 0 1 1 398.67798,720 A 541.5,541.5 0 1 1 1481.678,720 z"/>
-<path fill="#ed2939" d="M 1651.835,720 A 511.73499,511.73499 0 1 1 628.36499,720 A 511.73499,511.73499 0 1 1 1651.835,720 z"/>
-<path fill="#fff" id="star" d="M 1007.1951,733.06439 L 933.63466,676.63425 L 860.09279,733.09117 L 888.40587,642.09687 L 814.61147,586.0053 L 905.6704,586.1981 L 933.6049,495.07467 L 961.56934,586.18798 L 1052.6282,585.96246 L 978.8522,642.0808 L 1007.1951,733.06439 z"/>
-<use xlink:href="#star" transform="translate(577.18853,0)"/>
-<use xlink:href="#star" transform="translate(288.88853,-214.21117)"/>
-<use xlink:href="#star" transform="translate(107.99953,342.74883)"/>
-<use xlink:href="#star" transform="translate(469.18853,342.74883)"/>
+<svg width="500" viewBox="0 0 4340 2900" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="flag_singapore" transform="translate(10.000000, 10.000000)">
+            <rect id="Rectangle-path" fill="#ED2939" fill-rule="nonzero" x="0" y="0" width="4320" height="2880"></rect>
+            <rect id="Rectangle-path" fill="#FFFFFF" fill-rule="nonzero" x="0" y="1440" width="4320" height="1440"></rect>
+            <path d="M1481.678,720 C1481.678,1019.0622 1239.24019,1261.50001 940.17799,1261.50001 C641.115792,1261.50001 398.67798,1019.0622 398.67798,720 C398.67798,526.540679 501.887299,347.776895 669.427985,251.047235 C836.968671,154.317575 1043.38731,154.317575 1210.92799,251.047235 C1378.46868,347.776895 1481.678,526.540679 1481.678,720 Z" id="Shape" fill="#FFFFFF" fill-rule="nonzero"></path>
+            <path d="M1651.835,720 C1651.835,1002.62344 1422.72343,1231.735 1140.1,1231.735 C857.476556,1231.735 628.36499,1002.62344 628.36499,720 C628.36499,437.376561 857.476556,208.264995 1140.1,208.264995 C1422.72343,208.264995 1651.835,437.376561 1651.835,720 Z" id="Shape" fill="#ED2939" fill-rule="nonzero"></path>
+            <polygon id="star" fill="#FFFFFF" fill-rule="nonzero" points="1007.1951 733.06439 933.63466 676.63425 860.09279 733.09117 888.40587 642.09687 814.61147 586.0053 905.6704 586.1981 933.6049 495.07467 961.56934 586.18798 1052.6282 585.96246 978.8522 642.0808"></polygon>
+            <g id="star-link" transform="translate(1391.188530, 495.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                <polygon id="star" points="193.1951 238.06439 119.63466 181.63425 46.09279 238.09117 74.40587 147.09687 0.61147 91.0053 91.6704 91.1981 119.6049 0.07467 147.56934 91.18798 238.6282 90.96246 164.8522 147.0808"></polygon>
+            </g>
+            <g id="star-link" transform="translate(1102.888530, 280.788830)" fill="#FFFFFF" fill-rule="nonzero">
+                <polygon id="star" points="193.1951 238.06439 119.63466 181.63425 46.09279 238.09117 74.40587 147.09687 0.61147 91.0053 91.6704 91.1981 119.6049 0.07467 147.56934 91.18798 238.6282 90.96246 164.8522 147.0808"></polygon>
+            </g>
+            <g id="star-link" transform="translate(921.999530, 837.748830)" fill="#FFFFFF" fill-rule="nonzero">
+                <polygon id="star" points="193.1951 238.06439 119.63466 181.63425 46.09279 238.09117 74.40587 147.09687 0.61147 91.0053 91.6704 91.1981 119.6049 0.07467 147.56934 91.18798 238.6282 90.96246 164.8522 147.0808"></polygon>
+            </g>
+            <g id="star-link" transform="translate(1283.188530, 837.748830)" fill="#FFFFFF" fill-rule="nonzero">
+                <polygon id="star" points="193.1951 238.06439 119.63466 181.63425 46.09279 238.09117 74.40587 147.09687 0.61147 91.0053 91.6704 91.1981 119.6049 0.07467 147.56934 91.18798 238.6282 90.96246 164.8522 147.0808"></polygon>
+            </g>
+            <rect id="Rectangle-path" stroke="#CCCCCC" stroke-width="20" x="0" y="0" width="4320" height="2880"></rect>
+        </g>
+    </g>
 </svg>

@@ -16,7 +16,7 @@ import { Component, Input, OnChanges, OnInit } from '@angular/core';
       padding:35px;
       background-size: 372px auto;
       background-repeat: no-repeat;
-      background-image: url('./assets/pc.png');
+      background-image: url('./assets/pc.png?v2');
     }`,
     `.pcInner {
       width:100%;
