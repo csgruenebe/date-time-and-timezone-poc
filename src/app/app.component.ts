@@ -108,13 +108,35 @@ import { sharedStyles } from './app.styles';
     <bdd-and>DatePicker stays unchanged on <bdd-code>2018-03-25</bdd-code></bdd-and>
     <bdd-and>UtcResultDate emitted is <bdd-code>2018-03-25T02:00:00.000+0000</bdd-code></bdd-and>
 
+
     <bdd-scenario>TimePicker change triggers UTC Offset change (DST to no DST)</bdd-scenario>
+    <bdd-given>Database Date is <bdd-code>2018-03-25T02:00:00.000+0000</bdd-code></bdd-given>
+    <bdd-and>TimeZone is <bdd-code>Europe/Berlin</bdd-code></bdd-and>
+    <bdd-and>DateTimePicker Component initialized to DatePicker <bdd-code>2018-03-25</bdd-code> and TimePicker <bdd-code>04:00:00</bdd-code> with UTC Offset <bdd-code>+0200</bdd-code></bdd-and>
+    <bdd-when>User changes TimePicker to <bdd-code>01:50:00</bdd-code></bdd-when>
+    <bdd-then>UTC Offset changes to <bdd-code>+0100</bdd-code></bdd-then>
+    <bdd-and>DatePicker stays unchanged on <bdd-code>2018-03-25</bdd-code></bdd-and>
+    <bdd-and>UtcResultDate emitted is <bdd-code>2018-03-25T00:50:00.000+0000</bdd-code></bdd-and>
 
 
     <bdd-scenario>DatePicker change triggers UTC Offset change (no DST to DST)</bdd-scenario>
+    <bdd-given>Database Date is <bdd-code>2018-03-26T12:00:00.000+0000</bdd-code></bdd-given>
+    <bdd-and>TimeZone is <bdd-code>Europe/Berlin</bdd-code></bdd-and>
+    <bdd-and>DateTimePicker Component initialized to DatePicker <bdd-code>2018-03-26</bdd-code> and TimePicker <bdd-code>14:00:00</bdd-code> with UTC Offset <bdd-code>+0200</bdd-code></bdd-and>
+    <bdd-when>User changes DatePicker to <bdd-code>2018-03-24</bdd-code></bdd-when>
+    <bdd-then>UTC Offset changes to <bdd-code>+0100</bdd-code></bdd-then>
+    <bdd-and><bdd-discuss></bdd-discuss> TimePicker stays unchanged on <bdd-code>14:00:00</bdd-code></bdd-and>
+    <bdd-and>UtcResultDate emitted is <bdd-code>2018-03-24T13:00:00.000+0000</bdd-code></bdd-and>
+
 
     <bdd-scenario>DatePicker change triggers UTC Offset change (DST to no DST)</bdd-scenario>
-
+    <bdd-given>Database Date is <bdd-code>2018-03-24T12:00:00.000+0000</bdd-code></bdd-given>
+    <bdd-and>TimeZone is <bdd-code>Europe/Berlin</bdd-code></bdd-and>
+    <bdd-and>DateTimePicker Component initialized to DatePicker <bdd-code>2018-03-24</bdd-code> and TimePicker <bdd-code>13:00:00</bdd-code> with UTC Offset <bdd-code>+0100</bdd-code></bdd-and>
+    <bdd-when>User changes DatePicker to <bdd-code>2018-03-26</bdd-code></bdd-when>
+    <bdd-then>UTC Offset changes to <bdd-code>+0200</bdd-code></bdd-then>
+    <bdd-and><bdd-discuss></bdd-discuss> TimePicker stays unchanged on <bdd-code>13:00:00</bdd-code></bdd-and>
+    <bdd-and>UtcResultDate emitted is <bdd-code>2018-03-26T11:00:00.000+0000</bdd-code></bdd-and>
 
     <div style="margin-top:200px;">
       Used Frameworks
@@ -124,7 +146,7 @@ import { sharedStyles } from './app.styles';
     </div>
     <div style="margin-top:20px;">
       License <a href="https://github.com/csgruenebe/date-time-and-timezone-poc/blob/master/LICENSE">MIT</a> -&nbsp;
-      <a href="https://github.com/csgruenebe/date-time-and-timezone-poc">Source on GitHub</a> 
+      <a href="https://github.com/csgruenebe/date-time-and-timezone-poc">Source on GitHub</a>
     </div>
   </div>
   `,

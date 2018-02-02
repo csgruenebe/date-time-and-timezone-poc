@@ -14,6 +14,7 @@ import { BddScenarioComponent } from './bdd/bdd-scenario.component';
 import { BddGivenComponent } from './bdd/bdd-given.component';
 import { BddFeatureComponent } from './bdd/bdd-feature.component';
 import { BddCodeComponent } from './bdd/bdd-code.component';
+import { BddDiscuss } from './bdd/bdd-discuss.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { BddCodeComponent } from './bdd/bdd-code.component';
     BddGivenComponent,
     BddFeatureComponent,
     BddCodeComponent,
+    BddDiscuss,
   ],
   imports: [
     CommonModule,

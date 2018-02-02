@@ -117,4 +117,5 @@ export const sharedStyles = [
   `.bdd-given-text, .bdd-and-text, .bdd-when-text, .bdd-then-text {
     color: #333;
   }`,
+  `.bdd-discuss { background-color:#DB4040; padding:2px; color:#fff; font-size:12px; font-weight:300;}`,
 ];
