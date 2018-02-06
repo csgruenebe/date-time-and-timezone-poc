@@ -125,7 +125,7 @@ import { sharedStyles } from './app.styles';
     <bdd-and>DateTimePicker Component initialized to DatePicker <bdd-code>2018-03-26</bdd-code> and TimePicker <bdd-code>14:00:00</bdd-code> with UTC Offset <bdd-code>+0200</bdd-code></bdd-and>
     <bdd-when>User changes DatePicker to <bdd-code>2018-03-24</bdd-code></bdd-when>
     <bdd-then>UTC Offset changes to <bdd-code>+0100</bdd-code></bdd-then>
-    <bdd-and><bdd-discuss></bdd-discuss> TimePicker stays unchanged on <bdd-code>14:00:00</bdd-code></bdd-and>
+    <bdd-and>TimePicker stays unchanged on <bdd-code>14:00:00</bdd-code></bdd-and>
     <bdd-and>UtcResultDate emitted is <bdd-code>2018-03-24T13:00:00.000+0000</bdd-code></bdd-and>
 
 
@@ -135,7 +135,7 @@ import { sharedStyles } from './app.styles';
     <bdd-and>DateTimePicker Component initialized to DatePicker <bdd-code>2018-03-24</bdd-code> and TimePicker <bdd-code>13:00:00</bdd-code> with UTC Offset <bdd-code>+0100</bdd-code></bdd-and>
     <bdd-when>User changes DatePicker to <bdd-code>2018-03-26</bdd-code></bdd-when>
     <bdd-then>UTC Offset changes to <bdd-code>+0200</bdd-code></bdd-then>
-    <bdd-and><bdd-discuss></bdd-discuss> TimePicker stays unchanged on <bdd-code>13:00:00</bdd-code></bdd-and>
+    <bdd-and>TimePicker stays unchanged on <bdd-code>13:00:00</bdd-code></bdd-and>
     <bdd-and>UtcResultDate emitted is <bdd-code>2018-03-26T11:00:00.000+0000</bdd-code></bdd-and>
 
     <div style="margin-top:200px;">
